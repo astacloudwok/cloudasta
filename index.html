@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Astacloud</title>
+<title>Astacloud — AM Premium Generator</title>
 
-<!-- ================= OG TAGS (FIXED) ================= -->
+<!-- ================= OG TAGS ================= -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://asta.astamotion.my.id/">
 <meta property="og:title" content="Astacloud — AM Premium Generator">
@@ -15,26 +15,19 @@
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Astacloud Preview">
 <meta property="og:site_name" content="Astacloud">
 
-<!-- TWITTER CARD (fallback) -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Astacloud — AM Premium Generator">
 <meta name="twitter:description" content="Generator premium otomatis untuk Alight Motion.">
 <meta name="twitter:image" content="https://asta.astamotion.my.id/assets/preview.jpg">
 
-<!-- FAVICON -->
-<link rel="icon" href="/assets/favicon.jpg" type="image/jpeg">
-<link rel="apple-touch-icon" href="/assets/favicon.jpg">
+<link rel="icon" href="assets/favicon.jpg" type="image/jpeg">
+<link rel="apple-touch-icon" href="assets/favicon.jpg">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 
 <style>
 :root{--bg-dark:#070b14;--bg-card:#0f172a;--accent:#2563eb;--accent-glow:rgba(37,99,235,.4);--text-main:#f8fafc;--text-muted:#8b9bb4;--border-color:rgba(255,255,255,.08);}
@@ -67,26 +60,6 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 .faq-chevron{transition:transform .3s ease;}
 .spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
 @keyframes spin{to{transform:rotate(360deg);}}
-#chat-messages{background-color:#0b141a;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cg fill='%23182229' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3Ccircle cx='100' cy='80' r='1.2'/%3E%3Ccircle cx='200' cy='50' r='1.5'/%3E%3Ccircle cx='70' cy='170' r='1.2'/%3E%3Ccircle cx='180' cy='200' r='1.5'/%3E%3Ccircle cx='230' cy='130' r='1.2'/%3E%3C/g%3E%3C/svg%3E");}
-.wa-bubble{max-width:85%;padding:6px 10px 20px 10px;border-radius:8px;font-size:14px;line-height:1.4;word-wrap:break-word;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s;}
-.wa-bubble:active{transform:scale(.98);}
-.wa-bubble-self{background:#005c4b;color:#e9edef;border-top-right-radius:2px;}
-.wa-bubble-other{background:#202c33;color:#e9edef;border-top-left-radius:2px;}
-.wa-meta{position:absolute;bottom:3px;right:8px;display:flex;align-items:center;gap:3px;font-size:10px;color:rgba(233,237,239,.6);}
-.wa-name{font-size:11.5px;font-weight:700;margin-bottom:2px;color:#53bdeb;}
-.wa-reply{border-left:3px solid #53bdeb;padding:4px 8px;margin-bottom:4px;background:rgba(0,0,0,.25);border-radius:4px;font-size:12px;}
-.wa-reply-name{color:#53bdeb;font-weight:700;font-size:11px;}
-.wa-reply-text{color:rgba(233,237,239,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
-.wa-msg-enter{animation:waMsgIn .25s ease-out forwards;}
-@keyframes waMsgIn{from{opacity:0;transform:translateY(6px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
-.chat-date{text-align:center;font-size:11px;color:#8696a0;background:#182229;padding:4px 12px;border-radius:8px;margin:0 auto;width:fit-content;}
-#name-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;}
-#name-modal.show{display:flex;}
-.online-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse 2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.7);}50%{opacity:.8;box-shadow:0 0 0 4px rgba(34,197,94,0);}}
-.reply-preview{padding:8px 12px;background:#202c33;border-left:4px solid #53bdeb;margin:0 8px 4px 8px;border-radius:6px;display:none;align-items:center;gap:8px;}
-.reply-preview.show{display:flex;}
-.msg-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;align-self:flex-end;margin:0 6px;}
 .limit-bar{height:6px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden;}
 .limit-fill{height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);transition:width .5s ease;border-radius:999px;}
 .limit-fill.warning{background:linear-gradient(90deg,#f59e0b,#f97316);}
@@ -105,7 +78,7 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 <header class="fixed top-0 w-full z-40 bg-[#070b14]/90 backdrop-blur-lg border-b border-white/5 px-4 py-3">
   <div class="max-w-md mx-auto flex justify-between items-center">
     <div class="flex items-center gap-2">
-      <img src="/assets/asta.jpg" alt="Astacloud" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
+      <img src="assets/asta.jpg" alt="Astacloud" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
       <span class="font-extrabold text-lg tracking-tight">Astacloud</span>
     </div>
     <div class="flex items-center gap-2">
@@ -136,6 +109,7 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 
 <main class="pt-24 px-4 max-w-md mx-auto space-y-16" id="main-content">
 
+  <!-- HERO -->
   <section id="hero" class="text-center fade-in">
     <div class="inline-block px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-[10px] font-bold tracking-widest mb-5" data-i18n="hero.badge">ASTACLOUD • PREMIUM GENERATOR</div>
     <h1 class="text-3xl font-extrabold leading-tight mb-4 tracking-tight">
@@ -151,10 +125,11 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
     </div>
   </section>
 
+  <!-- GENERATOR -->
   <section id="premium-form" class="fade-in">
     <div class="glass-card">
       <div class="flex items-center gap-4 mb-6">
-        <img src="/assets/motion.jpg" alt="AM" class="w-14 h-14 rounded-2xl object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
+        <img src="assets/motion.jpg" alt="AM" class="w-14 h-14 rounded-2xl object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
         <div>
           <h2 class="font-bold text-base" data-i18n="form.title">Generator Premium AM</h2>
           <p class="text-[11px] text-[#8b9bb4]" data-i18n="form.subtitle">Verifikasi via email resmi</p>
@@ -213,6 +188,7 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
     </div>
   </section>
 
+  <!-- KENAPA -->
   <section id="kenapa-astacloud" class="fade-in">
     <div class="text-center mb-8">
       <h2 class="text-2xl font-extrabold mb-3" data-i18n="why.title">Kenapa Astacloud?</h2>
@@ -234,6 +210,7 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
     </div>
   </section>
 
+  <!-- CARA -->
   <section id="cara-menggunakan" class="fade-in">
     <div class="text-center mb-10">
       <h2 class="text-2xl font-extrabold mb-3" data-i18n="how.title">Cara Pakai</h2>
@@ -258,6 +235,7 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
     </div>
   </section>
 
+  <!-- TENTANG -->
   <section id="tentang" class="fade-in">
     <div class="glass-card">
       <h2 class="text-xl font-extrabold mb-4" data-i18n="about.title">Tentang Astacloud</h2>
@@ -275,6 +253,7 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
     </div>
   </section>
 
+  <!-- FAQ -->
   <section id="faq" class="fade-in">
     <h2 class="text-2xl font-extrabold text-center mb-8" data-i18n="faq.title">Pertanyaan Umum</h2>
     <div class="space-y-3">
@@ -305,9 +284,10 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
     </div>
   </section>
 
+  <!-- FOOTER -->
   <footer id="footer" class="fade-in pt-8 border-t border-white/5 text-center">
     <div class="flex items-center justify-center gap-2 mb-4">
-      <img src="/assets/asta.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
+      <img src="assets/asta.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
       <span class="font-extrabold text-lg tracking-tight">Astacloud</span>
     </div>
     <p class="text-[11px] text-[#8b9bb4] mb-1" data-i18n="footer.product">Alight Motion Premium</p>
@@ -315,12 +295,13 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
     <div class="flex justify-center gap-6 text-xs text-[#8b9bb4] mb-8">
       <a href="#" class="hover:text-blue-500 transition-colors" data-i18n="footer.privacy">Kebijakan Privasi</a>
       <a href="#" class="hover:text-blue-500 transition-colors" data-i18n="footer.terms">Syarat & Ketentuan</a>
-      <a href="javascript:void(0)" onclick="openChat()" class="hover:text-blue-500 transition-colors" data-i18n="footer.contact">Kontak</a>
+      <a href="javascript:void(0)" onclick="openDonationModal()" class="hover:text-blue-500 transition-colors" data-i18n="footer.contact">Kontak</a>
     </div>
   </footer>
 
 </main>
 
+<!-- NAV -->
 <nav class="fixed bottom-0 w-full z-50 bg-[#0a0f1c]/95 backdrop-blur-lg border-t border-white/10 px-2 py-3">
   <div class="max-w-md mx-auto flex justify-between items-center">
     <div class="nav-item flex flex-col items-center gap-1.5 w-1/5 active" onclick="scrollToSection('hero')" id="nav-beranda">
@@ -335,32 +316,47 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
     <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('faq')" id="nav-faq">
       <div class="nav-indicator"></div><i class="fas fa-question-circle text-lg"></i><span class="text-[10px] font-medium">FAQ</span>
     </div>
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="openChat()" id="nav-chat">
-      <div class="nav-indicator"></div><i class="fas fa-comment-dots text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.chat">Chat</span>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="openDonationModal()" id="nav-donasi">
+      <div class="nav-indicator"></div><i class="fas fa-hand-holding-heart text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.donate">Donasi</span>
     </div>
   </div>
 </nav>
 
-<button onclick="openChat()" class="fixed bottom-24 right-4 w-12 h-12 bg-blue-600 rounded-full shadow-lg shadow-blue-500/30 flex items-center justify-center text-white z-40 hover:scale-105 active:scale-95 transition-all">
-  <i class="fas fa-comment-dots text-lg"></i>
+<!-- FLOATING DONATION BUTTON -->
+<button onclick="openDonationModal()" class="fixed bottom-24 right-4 w-12 h-12 bg-pink-600 rounded-full shadow-lg shadow-pink-500/30 flex items-center justify-center text-white z-40 hover:scale-105 active:scale-95 transition-all">
+  <i class="fas fa-heart text-lg"></i>
 </button>
 
-<div id="name-modal">
-  <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in">
-    <div class="text-center mb-6">
-      <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4 border border-blue-500/30"><i class="fas fa-user text-blue-400 text-2xl"></i></div>
-      <h3 class="font-extrabold text-lg mb-2" data-i18n="chat.welcome">Selamat Datang di Public Chat</h3>
-      <p class="text-xs text-[#8b9bb4]" data-i18n="chat.welcomeDesc">Isi nama dulu biar teman-teman kenal kamu 👋</p>
+<!-- DONATION MODAL -->
+<div id="donation-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] hidden items-center justify-center p-4">
+  <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in text-center">
+    <div class="flex justify-between items-start mb-4">
+      <div class="text-left">
+        <h3 class="font-extrabold text-base text-white" data-i18n="donate.title">Dukung Astacloud</h3>
+        <p class="text-[11px] text-[#8b9bb4] mt-1" data-i18n="donate.subtitle">Traktir developer kopi ☕</p>
+      </div>
+      <button onclick="closeDonationModal()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors shrink-0">
+        <i class="fas fa-times text-xs"></i>
+      </button>
     </div>
-    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2" data-i18n="chat.yourName">NAMA KAMU</label>
-    <input id="userNameInput" type="text" placeholder="Misal: Imran" maxlength="20" class="input-field text-sm mb-4" data-i18n-placeholder="chat.namePlaceholder">
-    <button onclick="saveUserName()" class="btn-primary text-sm flex items-center justify-center gap-2">
-      <i class="fas fa-paper-plane"></i> <span data-i18n="chat.startBtn">Mulai Ngobrol</span>
-    </button>
-    <button onclick="closeNameModal()" class="w-full py-3 mt-3 rounded-xl bg-white/5 border border-white/10 text-gray-400 font-bold text-xs hover:bg-white/10 transition-colors" data-i18n="chat.cancel">Batal</button>
+
+    <p class="text-xs text-[#8b9bb4] mb-6 leading-relaxed" data-i18n="donate.desc">
+      Donasi kamu sangat berarti buat keberlangsungan & pengembangan website ini. Setiap rupiah sangat membantu! 🙏
+    </p>
+
+    <div class="bg-[#0a0f1c] border border-white/10 rounded-2xl p-4 mb-6 flex flex-col items-center">
+      <div class="w-56 h-56 bg-white rounded-xl flex items-center justify-center mb-4 overflow-hidden relative">
+        <img src="assets/qris.jpg" alt="QRIS" class="w-full h-full object-contain p-2" onerror="this.parentElement.innerHTML='<i class=\'fas fa-image text-gray-400 text-4xl\'></i>'">
+      </div>
+      <p class="text-[10px] text-gray-500" data-i18n="donate.scanHint">Scan QRIS di atas untuk berdonasi</p>
+      <p class="text-[10px] text-gray-500 mt-1">Support: DANA / OVO / GoPay / ShopeePay</p>
+    </div>
+
+    <button onclick="closeDonationModal()" class="w-full py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs hover:bg-white/10 transition-colors" data-i18n="donate.close">Tutup</button>
   </div>
 </div>
 
+<!-- SUPPORT MODAL -->
 <div id="support-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[90] hidden items-center justify-center p-4">
   <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in">
     <div class="flex justify-between items-start mb-5">
@@ -400,40 +396,6 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
   </div>
 </div>
 
-<div id="chat-overlay" class="fixed inset-0 bg-[#0b141a] z-[70] hidden flex-col w-full h-full overflow-hidden fade-in">
-  <div class="p-3 border-b border-white/10 flex items-center gap-3 bg-[#202c33] shrink-0">
-    <button onclick="closeChat()" class="text-gray-400 hover:text-white w-9 h-9 rounded-full hover:bg-white/10 flex items-center justify-center">
-      <i class="fas fa-arrow-left text-base"></i>
-    </button>
-    <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold relative shrink-0">
-      <i class="fas fa-users"></i>
-      <span class="absolute bottom-0 right-0 online-dot border-2 border-[#202c33]"></span>
-    </div>
-    <div class="flex-1 min-w-0">
-      <h3 class="text-white font-bold text-sm truncate" data-i18n="chat.headerTitle">Public Chat Astacloud</h3>
-      <p class="text-[11px] text-green-400 flex items-center gap-1.5"><span class="online-dot"></span><span id="online-count">Online</span></p>
-    </div>
-  </div>
-  <div id="chat-messages" class="flex-1 overflow-y-auto py-3 flex flex-col"></div>
-  <div id="typing-indicator" class="hidden px-4 py-1.5 text-[11px] text-green-400 italic bg-[#0b141a]"></div>
-  <div id="reply-preview" class="reply-preview">
-    <i class="fas fa-reply text-[#53bdeb] text-xs"></i>
-    <div class="flex-1 overflow-hidden">
-      <div id="reply-preview-name" class="text-[11px] font-bold text-[#53bdeb]">Balas</div>
-      <div id="reply-preview-text" class="text-[11px] text-gray-300 truncate">-</div>
-    </div>
-    <button onclick="cancelReply()" class="w-6 h-6 rounded-full hover:bg-white/10 flex items-center justify-center text-gray-400"><i class="fas fa-times text-xs"></i></button>
-  </div>
-  <div class="p-2 border-t border-white/10 bg-[#202c33] flex gap-2 items-end shrink-0">
-    <div class="flex-1 bg-[#2a3942] rounded-3xl flex items-center px-4 py-2.5 min-h-[46px]">
-      <input type="text" id="chat-input" placeholder="Ketik pesan..." class="flex-1 bg-transparent border-none text-sm text-white focus:outline-none placeholder-gray-500" maxlength="500" data-i18n-placeholder="chat.inputPlaceholder">
-    </div>
-    <button onclick="sendChatMessage()" class="w-11 h-11 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center transition-all active:scale-95 shrink-0">
-      <i class="fas fa-paper-plane text-sm"></i>
-    </button>
-  </div>
-</div>
-
 <script>
 // ============================================================
 // TRANSLATIONS
@@ -461,7 +423,7 @@ const TRANSLATIONS = {
     'how.step2.title': '2. Cek Inbox & Spam', 'how.step2.desc': 'Cari email dari Alight Creative, salin link verifikasinya.',
     'how.step3.title': '3. Verifikasi', 'how.step3.desc': 'Tempel link, klik verif, dan premium kamu langsung aktif.',
     'about.title': 'Tentang Astacloud',
-    'about.desc': 'Astacloud adalah tools sederhana buat bantu kamu mengaktifkan premium Alight Motion secara otomatis lewat verifikasi email. Dibikin buat ngirit waktu, tanpa ribet.',
+    'about.desc': 'Astacloud adalah tools sederhana buat bantu kamu mengaktifkan premium Alight Motion secara otomatis lewat verifikasi email.',
     'about.website': 'WEBSITE', 'about.product': 'PRODUK',
     'faq.title': 'Pertanyaan Umum',
     'faq.q1': 'Apa itu Astacloud?', 'faq.a1': 'Astacloud adalah website generator Alight Motion Premium yang jalan otomatis dan gratis.',
@@ -473,13 +435,12 @@ const TRANSLATIONS = {
     'footer.product': 'Alight Motion Premium',
     'footer.copyright': '© 2026 Astacloud • All Rights Reserved.',
     'footer.privacy': 'Kebijakan Privasi', 'footer.terms': 'Syarat & Ketentuan', 'footer.contact': 'Kontak',
-    'nav.home': 'Beranda', 'nav.premium': 'Premium', 'nav.guide': 'Panduan', 'nav.chat': 'Chat',
-    'chat.welcome': 'Selamat Datang di Public Chat',
-    'chat.welcomeDesc': 'Isi nama dulu biar teman-teman kenal kamu 👋',
-    'chat.yourName': 'NAMA KAMU', 'chat.namePlaceholder': 'Misal: Imran',
-    'chat.startBtn': 'Mulai Ngobrol', 'chat.cancel': 'Batal',
-    'chat.headerTitle': 'Public Chat Astacloud', 'chat.inputPlaceholder': 'Ketik pesan...',
-    'chat.today': 'Hari Ini',
+    'nav.home': 'Beranda', 'nav.premium': 'Premium', 'nav.guide': 'Panduan', 'nav.donate': 'Donasi',
+    'donate.title': 'Dukung Astacloud',
+    'donate.subtitle': 'Traktir developer kopi ☕',
+    'donate.desc': 'Donasi kamu sangat berarti buat keberlangsungan & pengembangan website ini. Setiap rupiah sangat membantu! 🙏',
+    'donate.scanHint': 'Scan QRIS di atas untuk berdonasi',
+    'donate.close': 'Tutup',
     'support.title': 'Support Developer',
     'support.subtitle': 'Dukung Astacloud dengan follow sosmed & channel resmi developer.',
     'support.waChannel': 'Saluran WhatsApp', 'support.contact': 'Hubungi Developer',
@@ -487,8 +448,7 @@ const TRANSLATIONS = {
     'toast.linkSent': 'Link terkirim ke', 'toast.premiumActive': 'Premium berhasil diaktifkan!',
     'toast.limitReached': 'Limit harian habis', 'toast.invalidEmail': 'Masukkan email yang valid dulu ya',
     'toast.pasteLink': 'Paste link verifikasi dari email', 'toast.sendEmailFirst': 'Kirim email dulu ya',
-    'toast.networkError': 'Network error', 'toast.copied': 'URL disalin', 'toast.pasted': 'Link ditempel!',
-    'toast.typing': 'sedang mengetik', 'toast.typingPlural': 'orang sedang mengetik'
+    'toast.networkError': 'Network error', 'toast.copied': 'URL disalin', 'toast.pasted': 'Link ditempel!'
   },
   en: {
     'hero.badge': 'ASTACLOUD • PREMIUM GENERATOR',
@@ -512,25 +472,24 @@ const TRANSLATIONS = {
     'how.step2.title': '2. Check Inbox & Spam', 'how.step2.desc': 'Look for an email from Alight Creative, copy the verification link.',
     'how.step3.title': '3. Verify', 'how.step3.desc': 'Paste the link, click verify, and your premium activates instantly.',
     'about.title': 'About Astacloud',
-    'about.desc': 'Astacloud is a simple tool that helps you activate Alight Motion premium automatically via email verification. Built to save time, no hassle.',
+    'about.desc': 'Astacloud is a simple tool that helps you activate Alight Motion premium automatically via email verification.',
     'about.website': 'WEBSITE', 'about.product': 'PRODUCT',
     'faq.title': 'Frequently Asked Questions',
     'faq.q1': 'What is Astacloud?', 'faq.a1': 'Astacloud is an Alight Motion Premium generator website that runs automatically and free.',
     'faq.q2': 'Daily limit?', 'faq.a2': '5 accounts per day globally, and 2 accounts per person (per IP). Auto-resets at 00:00 WIB.',
     'faq.q3': 'Is it paid?', 'faq.a3': 'No, 100% free. We only ask you to verify your email for the process.',
     'faq.q4': 'Verification link not received?', 'faq.a4': 'Check Spam or Promotions folder in Gmail. If still missing, wait 2-5 minutes and refresh.',
-    'faq.q5': 'Is my data safe?', 'faq.a5': 'Safe. Your email is only used for official Alight Motion verification, not stored or used for anything else.',
+    'faq.q5': 'Is my data safe?', 'faq.a5': 'Safe. Your email is only used for official Alight Motion verification.',
     'faq.q6': 'When does the limit reset?', 'faq.a6': 'Every day at 00:00 WIB (UTC+7). After that you can generate again.',
     'footer.product': 'Alight Motion Premium',
     'footer.copyright': '© 2026 Astacloud • All Rights Reserved.',
     'footer.privacy': 'Privacy Policy', 'footer.terms': 'Terms & Conditions', 'footer.contact': 'Contact',
-    'nav.home': 'Home', 'nav.premium': 'Premium', 'nav.guide': 'Guide', 'nav.chat': 'Chat',
-    'chat.welcome': 'Welcome to Public Chat',
-    'chat.welcomeDesc': 'Enter your name so friends can recognize you 👋',
-    'chat.yourName': 'YOUR NAME', 'chat.namePlaceholder': 'e.g. Imran',
-    'chat.startBtn': 'Start Chatting', 'chat.cancel': 'Cancel',
-    'chat.headerTitle': 'Astacloud Public Chat', 'chat.inputPlaceholder': 'Type a message...',
-    'chat.today': 'Today',
+    'nav.home': 'Home', 'nav.premium': 'Premium', 'nav.guide': 'Guide', 'nav.donate': 'Donate',
+    'donate.title': 'Support Astacloud',
+    'donate.subtitle': 'Buy developer a coffee ☕',
+    'donate.desc': 'Your donation means a lot for the sustainability & development of this website. Every rupiah helps! 🙏',
+    'donate.scanHint': 'Scan the QRIS above to donate',
+    'donate.close': 'Close',
     'support.title': 'Support Developer',
     'support.subtitle': 'Support Astacloud by following the developer social media & channels.',
     'support.waChannel': 'WhatsApp Channel', 'support.contact': 'Contact Developer',
@@ -538,8 +497,7 @@ const TRANSLATIONS = {
     'toast.linkSent': 'Link sent to', 'toast.premiumActive': 'Premium activated successfully!',
     'toast.limitReached': 'Daily limit reached', 'toast.invalidEmail': 'Please enter a valid email first',
     'toast.pasteLink': 'Paste the verification link from your email', 'toast.sendEmailFirst': 'Send email first',
-    'toast.networkError': 'Network error', 'toast.copied': 'URL copied', 'toast.pasted': 'Link pasted!',
-    'toast.typing': 'is typing', 'toast.typingPlural': 'people are typing'
+    'toast.networkError': 'Network error', 'toast.copied': 'URL copied', 'toast.pasted': 'Link pasted!'
   },
   jp: {
     'hero.badge': 'ASTACLOUD • プレミアムジェネレーター',
@@ -575,13 +533,12 @@ const TRANSLATIONS = {
     'footer.product': 'Alight Motion プレミアム',
     'footer.copyright': '© 2026 Astacloud • All Rights Reserved.',
     'footer.privacy': 'プライバシーポリシー', 'footer.terms': '利用規約', 'footer.contact': 'お問い合わせ',
-    'nav.home': 'ホーム', 'nav.premium': 'プレミアム', 'nav.guide': 'ガイド', 'nav.chat': 'チャット',
-    'chat.welcome': 'パブリックチャットへようこそ',
-    'chat.welcomeDesc': '名前を入力して友達に認識してもらいましょう 👋',
-    'chat.yourName': 'あなたの名前', 'chat.namePlaceholder': '例: イムラン',
-    'chat.startBtn': 'チャットを始める', 'chat.cancel': 'キャンセル',
-    'chat.headerTitle': 'Astacloud パブリックチャット', 'chat.inputPlaceholder': 'メッセージを入力...',
-    'chat.today': '今日',
+    'nav.home': 'ホーム', 'nav.premium': 'プレミアム', 'nav.guide': 'ガイド', 'nav.donate': '寄付',
+    'donate.title': 'Astacloud を支援',
+    'donate.subtitle': '開発者にコーヒーをおごる ☕',
+    'donate.desc': 'あなたの寄付は、このサイトの維持と開発にとって非常に重要です。',
+    'donate.scanHint': '上の QRIS をスキャンして寄付',
+    'donate.close': '閉じる',
     'support.title': '開発者をサポート',
     'support.subtitle': '開発者の SNS と公式チャンネルをフォローして Astacloud を応援してください。',
     'support.waChannel': 'WhatsApp チャンネル', 'support.contact': '開発者に連絡',
@@ -589,8 +546,7 @@ const TRANSLATIONS = {
     'toast.linkSent': 'リンクを送信しました:', 'toast.premiumActive': 'プレミアムが有効になりました！',
     'toast.limitReached': '1日の制限に達しました', 'toast.invalidEmail': '有効なメールアドレスを入力してください',
     'toast.pasteLink': 'メールの認証リンクを貼り付けてください', 'toast.sendEmailFirst': '先にメールを送信してください',
-    'toast.networkError': 'ネットワークエラー', 'toast.copied': 'URLをコピーしました', 'toast.pasted': 'リンクを貼り付けました！',
-    'toast.typing': 'が入力中', 'toast.typingPlural': '人が入力中'
+    'toast.networkError': 'ネットワークエラー', 'toast.copied': 'URLをコピーしました', 'toast.pasted': 'リンクを貼り付けました！'
   }
 };
 
@@ -639,7 +595,7 @@ window.addEventListener('scroll',()=>{
   const navIds=['beranda','premium','panduan','faq'];
   let cur='beranda';
   sections.forEach((id,i)=>{const s=document.getElementById(id);if(s&&window.pageYOffset>=s.offsetTop-120)cur=navIds[i];});
-  [...navIds,'chat'].forEach(id=>{const el=document.getElementById(`nav-${id}`);if(el)el.classList.remove('active');});
+  [...navIds,'donasi'].forEach(id=>{const el=document.getElementById(`nav-${id}`);if(el)el.classList.remove('active');});
   const curEl=document.getElementById(`nav-${cur}`); if(curEl) curEl.classList.add('active');
 });
 function toggleFaq(el){document.querySelectorAll('.faq-item').forEach(i=>{if(i!==el)i.classList.remove('active');});el.classList.toggle('active');}
@@ -784,184 +740,18 @@ function resetGenerator(){
 }
 
 // ============================================================
-// FIREBASE CHAT
+// DONATION MODAL
 // ============================================================
-const firebaseConfig = {
-  apiKey: "AIzaSy...",                    // ← GANTI
-  authDomain: "astacloud-xxx.firebaseapp.com",   // ← GANTI
-  databaseURL: "https://astacloud-xxx-default-rtdb.asia-southeast1.firebasedatabase.app",  // ← GANTI
-  projectId: "astacloud-xxx",             // ← GANTI
-  storageBucket: "astacloud-xxx.appspot.com",    // ← GANTI
-  messagingSenderId: "123456789",         // ← GANTI
-  appId: "1:123456789:web:abc123"         // ← GANTI
-};
-
-let db = null;
-try {
-  if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.database();
-  }
-} catch (e) { console.warn('Firebase init error:', e); }
-
-const ROOM = 'public';
-let userName = localStorage.getItem('astacloud_chat_user') || '';
-let userKey = localStorage.getItem('astacloud_chat_key') || 'u_' + Math.random().toString(36).slice(2, 10);
-localStorage.setItem('astacloud_chat_key', userKey);
-
-let replyTo = null, chatListeners = [], presenceListener = null;
-let typingListener = null, typingTimeout = null, isChatOpen = false;
-
-const chatOverlay = document.getElementById('chat-overlay');
-const chatMessages = document.getElementById('chat-messages');
-const chatInput = document.getElementById('chat-input');
-const nameModal = document.getElementById('name-modal');
-const userNameInput = document.getElementById('userNameInput');
-
-const AVATAR_COLORS = ['#0ea5e9','#8b5cf6','#ec4899','#f59e0b','#10b981','#ef4444','#6366f1','#14b8a6'];
-function getAvatarColor(name){let h=0;for(let i=0;i<name.length;i++)h=name.charCodeAt(i)+((h<<5)-h);return AVATAR_COLORS[Math.abs(h)%AVATAR_COLORS.length];}
-function getInitials(name){return name.trim().split(/\s+/).map(w=>w[0]).join('').substring(0,2).toUpperCase()||'?';}
-function getCurrentTime(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
-
-function setupPresence(){
-  if(!userName||!db)return;
-  const userRef=db.ref(`presence/${userKey}`);
-  const connectedRef=db.ref('.info/connected');
-  connectedRef.on('value',(snap)=>{
-    if(snap.val()===true){userRef.onDisconnect().remove();userRef.set({name:userName,ts:firebase.database.ServerValue.TIMESTAMP});}
-  });
-  if(presenceListener)presenceListener.off();
-  presenceListener=db.ref('presence');
-  presenceListener.on('value',(snap)=>{
-    const users=snap.val()||{};
-    const list=Object.values(users).map(u=>u.name).filter(Boolean);
-    const unique=[...new Set(list)];
-    const countEl=document.getElementById('online-count');
-    if(countEl)countEl.textContent=`${unique.length} online`;
-  });
+function openDonationModal(){
+  const modal=document.getElementById('donation-modal');
+  if(!modal)return;
+  modal.classList.remove('hidden');modal.classList.add('flex');
 }
-
-function loadMessagesRealtime(){
-  if(!db)return;
-  chatListeners.forEach(ref=>ref.off());chatListeners=[];
-  chatMessages.innerHTML='';addSystemMessage(t('chat.today'));
-  const msgRef=db.ref(`chats/${ROOM}`).orderByChild('ts').limitToLast(100);
-  const rendered=new Set();
-  msgRef.on('child_added',(snap)=>{
-    const m=snap.val();if(!m)return;
-    const key=snap.key;if(rendered.has(key))return;rendered.add(key);
-    const isSelf=m.user===userName;
-    addMessage(m.text,isSelf?'self':'other',m.user,m.time,m.reply);
-    if(isChatOpen)setTimeout(()=>{chatMessages.scrollTop=chatMessages.scrollHeight;},50);
-  });
-  chatListeners.push(msgRef);
+function closeDonationModal(){
+  const modal=document.getElementById('donation-modal');
+  if(!modal)return;
+  modal.classList.add('hidden');modal.classList.remove('flex');
 }
-
-function setupTyping(){
-  if(!db)return;
-  if(typingListener)typingListener.off();
-  typingListener=db.ref(`typing/${ROOM}`);
-  typingListener.on('value',(snap)=>{
-    const data=snap.val()||{};const now=Date.now();
-    const typingUsers=Object.entries(data).filter(([k,v])=>k!==userKey&&v.name&&(now-v.ts)<4000).map(([k,v])=>v.name);
-    const el=document.getElementById('typing-indicator');if(!el)return;
-    if(typingUsers.length===0){el.classList.add('hidden');}
-    else{el.classList.remove('hidden');
-      el.textContent=typingUsers.length===1?`${typingUsers[0]} ${t('toast.typing')}...`:`${typingUsers.length} ${t('toast.typingPlural')}...`;}
-  });
-}
-function broadcastTyping(){
-  if(!userName||!db)return;
-  const typingRef=db.ref(`typing/${ROOM}/${userKey}`);
-  typingRef.set({name:userName,ts:Date.now()});
-  if(typingTimeout)clearTimeout(typingTimeout);
-  typingTimeout=setTimeout(()=>{typingRef.remove();},2500);
-}
-
-function openChat(){
-  if(!userName){nameModal.classList.add('show');userNameInput.focus();return;}
-  chatOverlay.classList.remove('hidden');chatOverlay.classList.add('flex');
-  document.body.style.overflow='hidden';isChatOpen=true;
-  setupPresence();loadMessagesRealtime();setupTyping();
-  setTimeout(()=>chatInput.focus(),200);
-}
-function closeNameModal(){nameModal.classList.remove('show');}
-function saveUserName(){
-  const name=userNameInput.value.trim();
-  if(!name){userNameInput.focus();return;}
-  userName=name.substring(0,20);
-  localStorage.setItem('astacloud_chat_user',userName);
-  nameModal.classList.remove('show');
-  setTimeout(()=>{
-    chatOverlay.classList.remove('hidden');chatOverlay.classList.add('flex');
-    document.body.style.overflow='hidden';isChatOpen=true;
-    setupPresence();loadMessagesRealtime();setupTyping();
-    setTimeout(()=>chatInput.focus(),200);
-  },200);
-}
-function closeChat(){
-  chatOverlay.classList.add('hidden');chatOverlay.classList.remove('flex');
-  document.body.style.overflow='';isChatOpen=false;cancelReply();
-  if(userName&&db)db.ref(`typing/${ROOM}/${userKey}`).remove();
-}
-function sendChatMessage(){
-  const msg=chatInput.value.trim();if(!msg)return;
-  if(!userName){nameModal.classList.add('show');return;}
-  if(!db){toast('Chat belum siap','err');return;}
-  const time=getCurrentTime();
-  const msgRef=db.ref(`chats/${ROOM}`).push();
-  msgRef.set({
-    user:userName,userKey,text:msg.substring(0,500),time,
-    ts:firebase.database.ServerValue.TIMESTAMP,
-    reply:replyTo?{name:replyTo.name,text:replyTo.text.substring(0,100)}:null
-  });
-  chatInput.value='';cancelReply();
-  if(typingTimeout)clearTimeout(typingTimeout);
-  db.ref(`typing/${ROOM}/${userKey}`).remove();
-}
-function cancelReply(){replyTo=null;document.getElementById('reply-preview').classList.remove('show');}
-function setReply(name,text){
-  replyTo={name,text};
-  document.getElementById('reply-preview-name').textContent=name;
-  document.getElementById('reply-preview-text').textContent=text;
-  document.getElementById('reply-preview').classList.add('show');
-  chatInput.focus();
-}
-function addMessage(text,type,sender,time,reply){
-  const isSelf=type==='self';
-  const wrapper=document.createElement('div');
-  wrapper.className=`flex ${isSelf?'justify-end':'justify-start'} px-2 wa-msg-enter items-end my-1`;
-  if(!isSelf){
-    const av=document.createElement('div');
-    av.className='msg-avatar';av.style.background=getAvatarColor(sender||'?');
-    av.textContent=getInitials(sender||'?');wrapper.appendChild(av);
-  }
-  const bubble=document.createElement('div');
-  bubble.className=`wa-bubble ${isSelf?'wa-bubble-self':'wa-bubble-other'}`;
-  if(reply&&reply.name){
-    const r=document.createElement('div');r.className='wa-reply';
-    r.innerHTML=`<div class="wa-reply-name">${escapeHtmlChat(reply.name)}</div><div class="wa-reply-text">${escapeHtmlChat(reply.text)}</div>`;
-    bubble.appendChild(r);
-  }
-  if(!isSelf&&sender){const n=document.createElement('div');n.className='wa-name';n.textContent=sender;bubble.appendChild(n);}
-  const textEl=document.createElement('div');textEl.style.wordBreak='break-word';textEl.textContent=text;bubble.appendChild(textEl);
-  const metaEl=document.createElement('div');metaEl.className='wa-meta';
-  const timeEl=document.createElement('span');timeEl.textContent=time||getCurrentTime();metaEl.appendChild(timeEl);
-  if(isSelf){const c=document.createElement('i');c.className='fas fa-check-double';c.style.fontSize='11px';c.style.color='#53bdeb';metaEl.appendChild(c);}
-  bubble.appendChild(metaEl);
-  bubble.onclick=()=>setReply(sender||'Anonim',text);
-  wrapper.appendChild(bubble);chatMessages.appendChild(wrapper);
-}
-function addSystemMessage(text){
-  const d=document.createElement('div');d.className='flex justify-center my-2 wa-msg-enter';
-  d.innerHTML=`<div class="chat-date">${escapeHtmlChat(text)}</div>`;chatMessages.appendChild(d);
-}
-chatInput.addEventListener('input',()=>{if(chatInput.value.trim().length>0)broadcastTyping();});
-chatInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChatMessage();}});
-userNameInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveUserName();}});
-window.addEventListener('beforeunload',()=>{
-  if(userName&&db){db.ref(`presence/${userKey}`).remove();db.ref(`typing/${ROOM}/${userKey}`).remove();}
-});
 
 // ============================================================
 // SUPPORT MODAL
@@ -984,12 +774,15 @@ function checkShowSupportModal(){
   if(until&&Date.now()<parseInt(until))return;
   setTimeout(()=>{openSupportModal();},1200);
 }
+
 document.addEventListener('click',(e)=>{
-  const modal=document.getElementById('support-modal');
-  if(modal&&e.target===modal)closeSupportModal();
+  const sm=document.getElementById('support-modal');
+  const dm=document.getElementById('donation-modal');
+  if(sm&&e.target===sm)closeSupportModal();
+  if(dm&&e.target===dm)closeDonationModal();
 });
 document.addEventListener('keydown',(e)=>{
-  if(e.key==='Escape'){closeSupportModal();closeLangMenu();}
+  if(e.key==='Escape'){closeSupportModal();closeDonationModal();closeLangMenu();}
 });
 
 // ============================================================
