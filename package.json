@@ -1,8 +1,0 @@
-{
-  "name": "astacloud",
-  "version": "1.0.0",
-  "dependencies": {
-    "axios": "^1.7.7",
-    "@upstash/redis": "^1.34.0"
-  }
-}
