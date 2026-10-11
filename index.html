@@ -5,20 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Astacloud — AM Premium Generator</title>
 
-<!-- OG Meta -->
 <meta property="og:title" content="Astacloud — AM Premium Generator">
 <meta property="og:description" content="Generator premium otomatis untuk Alight Motion — verifikasi via email dengan mudah dan cepat.">
-<meta property="og:image" content="assets/preview.jpg">
+<meta property="og:image" content="https://asta.astamotion.my.id/assets/preview.jpg">
+<meta property="og:url" content="https://asta.astamotion.my.id">
 <meta property="og:type" content="website">
 
 <link rel="icon" href="assets/favicon.jpg" type="image/jpeg">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
 <style>
 :root{--bg-dark:#070b14;--bg-card:#0f172a;--accent:#2563eb;--accent-glow:rgba(37,99,235,.4);--text-main:#f8fafc;--text-muted:#8b9bb4;--border-color:rgba(255,255,255,.08);}
-*{font-family:'Plus Jakarta Sans',sans-serif;box-sizing:border-box;}
-body{background-color:var(--bg-dark);color:var(--text-main);margin:0;padding:0;overflow-x:hidden;scroll-behavior:smooth;}
+*{font-family:'Plus Jakarta Sans','Noto Sans JP',sans-serif;box-sizing:border-box;}
+body{background-color:var(--bg-dark);color:var(--text-main);margin:0;padding:0;overflow-x:hidden;scroll-behavior:smooth;transition:opacity .3s;}
 body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.06) 1px,transparent 1px);background-size:60px 60px;background-attachment:fixed;}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:var(--bg-dark);}
@@ -40,13 +45,14 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 .nav-indicator{display:none;width:4px;height:4px;background:var(--accent);border-radius:50%;margin:0 auto 4px;}
 .toast{position:fixed;top:20px;right:20px;z-index:999;padding:12px 18px;border-radius:12px;font-size:13px;background:#1e293b;border:1px solid var(--border-color);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.5);animation:slideIn .3s ease;max-width:90vw;}
 @keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
-.faq-content{max-height:0;overflow:hidden;transition:max-height .3s ease-out;}
-.faq-item.active .faq-content{max-height:300px;}
+.faq-content{max-height:0;overflow:hidden;transition:max-height .35s ease-out;}
+.faq-item.active .faq-content{max-height:400px;}
 .faq-item.active .faq-chevron{transform:rotate(180deg);}
 .faq-chevron{transition:transform .3s ease;}
 .spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
 @keyframes spin{to{transform:rotate(360deg);}}
-/* Chat WA-style */
+
+/* Chat */
 #chat-messages{background-color:#0b141a;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cg fill='%23182229' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3Ccircle cx='100' cy='80' r='1.2'/%3E%3Ccircle cx='200' cy='50' r='1.5'/%3E%3Ccircle cx='70' cy='170' r='1.2'/%3E%3Ccircle cx='180' cy='200' r='1.5'/%3E%3Ccircle cx='230' cy='130' r='1.2'/%3E%3C/g%3E%3C/svg%3E");}
 .wa-bubble{max-width:85%;padding:6px 10px 20px 10px;border-radius:8px;font-size:14px;line-height:1.4;word-wrap:break-word;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s;}
 .wa-bubble:active{transform:scale(.98);}
@@ -67,10 +73,24 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 .reply-preview{padding:8px 12px;background:#202c33;border-left:4px solid #53bdeb;margin:0 8px 4px 8px;border-radius:6px;display:none;align-items:center;gap:8px;}
 .reply-preview.show{display:flex;}
 .msg-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;align-self:flex-end;margin:0 6px;}
+
+/* Limit bar */
 .limit-bar{height:6px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden;}
 .limit-fill{height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);transition:width .5s ease;border-radius:999px;}
 .limit-fill.warning{background:linear-gradient(90deg,#f59e0b,#f97316);}
 .limit-fill.danger{background:linear-gradient(90deg,#ef4444,#dc2626);}
+
+/* Language dropdown */
+.lang-menu{position:absolute;top:calc(100% + 8px);right:0;background:#0f172a;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:6px;min-width:170px;box-shadow:0 10px 30px rgba(0,0,0,.6);opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .2s;z-index:60;}
+.lang-menu.show{opacity:1;visibility:visible;transform:translateY(0);}
+.lang-option{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:background .15s;font-size:13px;font-weight:600;color:#e8e4ff;}
+.lang-option:hover{background:rgba(37,99,235,.15);}
+.lang-option.active{background:rgba(37,99,235,.2);color:#60a5fa;}
+.lang-flag{font-size:18px;line-height:1;}
+
+/* Fade content for lang switch */
+.lang-content{transition:opacity .25s;}
+.lang-content.loading{opacity:0.3;}
 </style>
 </head>
 <body class="grid-active pb-24">
@@ -79,26 +99,59 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 <header class="fixed top-0 w-full z-40 bg-[#070b14]/90 backdrop-blur-lg border-b border-white/5 px-4 py-3">
   <div class="max-w-md mx-auto flex justify-between items-center">
     <div class="flex items-center gap-2">
-      <img src="assets/asta.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
+      <img src="assets/asta.jpg" alt="Astacloud" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
       <span class="font-extrabold text-lg tracking-tight">Astacloud</span>
     </div>
     <div class="flex items-center gap-2">
-      <button onclick="toggleGrid()" id="grid-toggle-btn" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="fas fa-border-all text-xs"></i></button>
-      <div class="flex items-center gap-1 text-xs text-gray-400 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5"><i class="fas fa-globe text-blue-400"></i> ID</div>
+      <button onclick="toggleGrid()" id="grid-toggle-btn" class="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-white transition-colors" title="Toggle Grid">
+        <i class="fas fa-border-all text-xs"></i>
+      </button>
+
+      <!-- LANGUAGE SELECTOR -->
+      <div class="relative">
+        <button onclick="toggleLangMenu()" id="lang-btn" class="h-9 px-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
+          <span id="lang-flag-current" class="lang-flag">🇮🇩</span>
+          <span id="lang-code-current" class="text-xs font-bold tracking-wider">ID</span>
+          <i class="fas fa-chevron-down text-[9px] opacity-60"></i>
+        </button>
+        <div id="lang-menu" class="lang-menu">
+          <div class="lang-option active" onclick="setLanguage('id')" data-lang="id">
+            <span class="lang-flag">🇮🇩</span>
+            <span>Indonesia</span>
+          </div>
+          <div class="lang-option" onclick="setLanguage('en')" data-lang="en">
+            <span class="lang-flag">🇬🇧</span>
+            <span>English</span>
+          </div>
+          <div class="lang-option" onclick="setLanguage('jp')" data-lang="jp">
+            <span class="lang-flag">🇯🇵</span>
+            <span>日本語</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </header>
 
-<main class="pt-24 px-4 max-w-md mx-auto space-y-16">
+<main class="pt-24 px-4 max-w-md mx-auto space-y-16 lang-content" id="main-content">
 
   <!-- HERO -->
   <section id="hero" class="text-center fade-in">
-    <div class="inline-block px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-[10px] font-bold tracking-widest mb-5">ASTACLOUD • PREMIUM GENERATOR</div>
-    <h1 class="text-3xl font-extrabold leading-tight mb-4 tracking-tight">Alight Motion<br>Premium</h1>
-    <p class="text-sm text-[#8b9bb4] mb-8 px-4 leading-relaxed">Generator premium otomatis — verifikasi via email ✨</p>
+    <div class="inline-block px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-[10px] font-bold tracking-widest mb-5" data-i18n="hero.badge">ASTACLOUD • PREMIUM GENERATOR</div>
+    <h1 class="text-3xl font-extrabold leading-tight mb-4 tracking-tight">
+      <span data-i18n="hero.title1">Alight Motion</span><br>
+      <span data-i18n="hero.title2">Premium</span>
+    </h1>
+    <p class="text-sm text-[#8b9bb4] mb-8 px-4 leading-relaxed" data-i18n="hero.subtitle">
+      Buka semua fitur premium Alight Motion dalam hitungan menit ✨
+    </p>
     <div class="space-y-4">
-      <button onclick="scrollToSection('premium-form')" class="btn-primary flex items-center justify-center gap-2 text-sm"><i class="fas fa-crown"></i> Dapatkan Premium</button>
-      <button onclick="scrollToSection('cara-menggunakan')" class="w-full py-4 rounded-xl bg-white/5 border border-white/10 text-sm font-bold text-white hover:bg-white/10 transition-colors">Lihat Cara Kerja</button>
+      <button onclick="scrollToSection('premium-form')" class="btn-primary flex items-center justify-center gap-2 text-sm">
+        <i class="fas fa-crown"></i> <span data-i18n="hero.btn1">Ambil Premium Sekarang</span>
+      </button>
+      <button onclick="scrollToSection('cara-menggunakan')" class="w-full py-4 rounded-xl bg-white/5 border border-white/10 text-sm font-bold text-white hover:bg-white/10 transition-colors" data-i18n="hero.btn2">
+        Pelajari Cara Kerjanya
+      </button>
     </div>
   </section>
 
@@ -108,8 +161,8 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
       <div class="flex items-center gap-4 mb-6">
         <img src="assets/motion.jpg" alt="AM" class="w-14 h-14 rounded-2xl object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
         <div>
-          <h2 class="font-bold text-base">AM Premium Generator</h2>
-          <p class="text-[11px] text-[#8b9bb4]">Verifikasi via email</p>
+          <h2 class="font-bold text-base" data-i18n="form.title">Generator Premium AM</h2>
+          <p class="text-[11px] text-[#8b9bb4]" data-i18n="form.subtitle">Verifikasi via email resmi</p>
         </div>
       </div>
 
@@ -118,7 +171,7 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-2">
             <i class="fas fa-clock text-blue-400 text-sm"></i>
-            <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wider">Limit Harian</span>
+            <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wider" data-i18n="form.limitTitle">Limit Harian</span>
           </div>
           <span id="limit-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300">- / 5</span>
         </div>
@@ -126,51 +179,45 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
           <div id="limit-fill" class="limit-fill" style="width:0%"></div>
         </div>
         <div class="flex items-center justify-between text-[11px]">
-          <span class="text-[#8b9bb4]">Sisa: <b id="limit-left" class="text-green-400">-</b></span>
-          <span class="text-[#8b9bb4]">Reset: <b class="text-white">00:00 WIB</b></span>
+          <span class="text-[#8b9bb4]"><span data-i18n="form.limitLeft">Sisa</span>: <b id="limit-left" class="text-green-400">-</b></span>
+          <span class="text-[#8b9bb4]"><span data-i18n="form.limitReset">Reset</span>: <b class="text-white">00:00 WIB</b></span>
         </div>
         <p id="limit-msg" class="text-[10px] text-[#8b9bb4] mt-2 hidden"></p>
       </div>
 
       <!-- TABS -->
       <div class="flex gap-2 mb-6 p-1.5 rounded-xl bg-black/30">
-        <button id="tab-send" onclick="switchGenTab('send')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white">Send</button>
-        <button id="tab-verify" onclick="switchGenTab('verify')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all text-gray-400 cursor-not-allowed opacity-50" disabled>Verif</button>
+        <button id="tab-send" onclick="switchGenTab('send')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white" data-i18n="form.tabSend">Kirim</button>
+        <button id="tab-verify" onclick="switchGenTab('verify')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all text-gray-400 cursor-not-allowed opacity-50" disabled data-i18n="form.tabVerify">Verifikasi</button>
       </div>
 
       <!-- PANEL SEND -->
       <div id="panel-send" class="space-y-4">
-        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider">EMAIL</label>
-        <input id="sendEmail" type="email" placeholder="kamu@gmail.com" class="input-field text-sm">
+        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider" data-i18n="form.emailLabel">ALAMAT EMAIL</label>
+        <input id="sendEmail" type="email" placeholder="kamu@gmail.com" class="input-field text-sm" data-i18n-placeholder="form.emailPlaceholder">
         <div class="flex gap-2 mt-2">
-          <button id="btnSend" onclick="submitEmail()" class="btn-primary text-sm flex items-center justify-center gap-2 flex-1"><i class="fas fa-paper-plane"></i> Send</button>
-          <button onclick="copySendLink()" title="Salin URL API" class="w-14 bg-white/5 border border-white/10 rounded-xl text-white hover:bg-white/10 transition-colors flex items-center justify-center shrink-0"><i class="fas fa-copy"></i></button>
-        </div>
-
-        <div class="pt-2 mt-2 border-t border-white/5">
-          <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3 mt-3">Atau pakai Bot</p>
-          <div class="grid grid-cols-2 gap-2">
-            <a href="https://wa.me/62882019782087?text=.amprem" target="_blank"
-               class="flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold hover:bg-green-500/20 transition-all active:scale-95">
-              <i class="fab fa-whatsapp text-base"></i> WhatsApp
-            </a>
-            <a href="https://t.me/USERNAME_BOT_KAMU" target="_blank"
-               class="flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold hover:bg-blue-500/20 transition-all active:scale-95">
-              <i class="fab fa-telegram text-base"></i> Telegram
-            </a>
-          </div>
+          <button id="btnSend" onclick="submitEmail()" class="btn-primary text-sm flex items-center justify-center gap-2 flex-1">
+            <i class="fas fa-paper-plane"></i> <span data-i18n="form.sendBtn">Kirim Link</span>
+          </button>
+          <button onclick="copySendLink()" title="Salin URL" class="w-14 bg-white/5 border border-white/10 rounded-xl text-white hover:bg-white/10 transition-colors flex items-center justify-center shrink-0">
+            <i class="fas fa-copy"></i>
+          </button>
         </div>
       </div>
 
       <!-- PANEL VERIFY -->
       <div id="panel-verify" class="space-y-4 hidden">
         <div id="verify-input-group" class="space-y-4">
-          <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider">LINK VERIFIKASI</label>
+          <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider" data-i18n="form.linkLabel">LINK VERIFIKASI</label>
           <div class="relative">
-            <input id="verifyLink" type="text" placeholder="Tempel link verifikasi dari email..." class="input-field text-sm pr-14">
-            <button onclick="pasteVerifyLink()" title="Tempel dari clipboard" class="absolute right-2 top-2 w-10 h-10 bg-[#1e2333] hover:bg-[#252b3d] border border-white/10 rounded-lg text-white flex items-center justify-center transition-colors"><i class="fas fa-paste text-sm"></i></button>
+            <input id="verifyLink" type="text" placeholder="Tempel link dari email..." class="input-field text-sm pr-14" data-i18n-placeholder="form.linkPlaceholder">
+            <button onclick="pasteVerifyLink()" class="absolute right-2 top-2 w-10 h-10 bg-[#1e2333] hover:bg-[#252b3d] border border-white/10 rounded-lg text-white flex items-center justify-center transition-colors">
+              <i class="fas fa-paste text-sm"></i>
+            </button>
           </div>
-          <button id="btnVerify" onclick="submitUrl()" class="btn-primary text-sm flex items-center justify-center gap-2 mt-2"><i class="fas fa-check-circle"></i> Verif</button>
+          <button id="btnVerify" onclick="submitUrl()" class="btn-primary text-sm flex items-center justify-center gap-2 mt-2">
+            <i class="fas fa-check-circle"></i> <span data-i18n="form.verifyBtn">Aktifkan Premium</span>
+          </button>
         </div>
         <div id="verifyResult"></div>
       </div>
@@ -180,21 +227,32 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
   <!-- KENAPA -->
   <section id="kenapa-astacloud" class="fade-in">
     <div class="text-center mb-8">
-      <h2 class="text-2xl font-extrabold mb-3">Kenapa Astacloud</h2>
-      <p class="text-xs text-[#8b9bb4] px-6 leading-relaxed">Sederhana, rapi, dan langsung ke inti: dapatkan premium dengan mudah.</p>
+      <h2 class="text-2xl font-extrabold mb-3" data-i18n="why.title">Kenapa Astacloud?</h2>
+      <p class="text-xs text-[#8b9bb4] px-6 leading-relaxed" data-i18n="why.subtitle">
+        Dibuat simpel, dibangun untuk kecepatan — fokus ke satu hal: bikin kamu dapat premium tanpa ribet.
+      </p>
     </div>
     <div class="space-y-4">
       <div class="glass-card flex items-start gap-5">
         <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-xl shrink-0 border border-blue-500/20"><i class="fas fa-bolt"></i></div>
-        <div class="pt-1"><h3 class="font-bold text-sm mb-1.5">Proses Cepat</h3><p class="text-[11px] text-[#8b9bb4] leading-relaxed">Hanya butuh beberapa menit untuk mendapatkan akses premium.</p></div>
+        <div class="pt-1">
+          <h3 class="font-bold text-sm mb-1.5" data-i18n="why.card1.title">Proses Kilat</h3>
+          <p class="text-[11px] text-[#8b9bb4] leading-relaxed" data-i18n="why.card1.desc">Cuma butuh beberapa menit dari kirim email sampai premium aktif.</p>
+        </div>
       </div>
       <div class="glass-card flex items-start gap-5">
         <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-xl shrink-0 border border-blue-500/20"><i class="fas fa-shield-alt"></i></div>
-        <div class="pt-1"><h3 class="font-bold text-sm mb-1.5">Aman & Terpercaya</h3><p class="text-[11px] text-[#8b9bb4] leading-relaxed">Data email Anda aman dan tidak disalahgunakan.</p></div>
+        <div class="pt-1">
+          <h3 class="font-bold text-sm mb-1.5" data-i18n="why.card2.title">Aman & Transparan</h3>
+          <p class="text-[11px] text-[#8b9bb4] leading-relaxed" data-i18n="why.card2.desc">Email kamu cuma dipakai buat verifikasi resmi — gak disimpan, gak disalahgunakan.</p>
+        </div>
       </div>
       <div class="glass-card flex items-start gap-5">
         <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-xl shrink-0 border border-blue-500/20"><i class="fas fa-check-circle"></i></div>
-        <div class="pt-1"><h3 class="font-bold text-sm mb-1.5">Gratis & Mudah</h3><p class="text-[11px] text-[#8b9bb4] leading-relaxed">Tidak perlu bayar, cukup ikuti langkah verifikasi email.</p></div>
+        <div class="pt-1">
+          <h3 class="font-bold text-sm mb-1.5" data-i18n="why.card3.title">Gratis Sepenuhnya</h3>
+          <p class="text-[11px] text-[#8b9bb4] leading-relaxed" data-i18n="why.card3.desc">Nggak ada biaya tersembunyi. Cukup verifikasi email, langsung bisa pakai.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -202,24 +260,24 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
   <!-- CARA -->
   <section id="cara-menggunakan" class="fade-in">
     <div class="text-center mb-10">
-      <h2 class="text-2xl font-extrabold mb-3">Cara Menggunakan</h2>
-      <p class="text-xs text-[#8b9bb4]">Tiga langkah singkat sampai premium aktif.</p>
+      <h2 class="text-2xl font-extrabold mb-3" data-i18n="how.title">Cara Pakai</h2>
+      <p class="text-xs text-[#8b9bb4]" data-i18n="how.subtitle">Tiga langkah simpel, langsung jadi.</p>
     </div>
     <div class="space-y-10 text-center">
       <div class="flex flex-col items-center">
         <div class="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 text-2xl mb-4 shadow-lg shadow-blue-500/10"><i class="fas fa-envelope"></i></div>
-        <h3 class="font-bold text-sm mb-2">1. Masukkan Email</h3>
-        <p class="text-[11px] text-[#8b9bb4] px-4">Masukkan email aktif yang ingin didaftarkan premium.</p>
+        <h3 class="font-bold text-sm mb-2" data-i18n="how.step1.title">1. Masukkan Email</h3>
+        <p class="text-[11px] text-[#8b9bb4] px-4" data-i18n="how.step1.desc">Pakai email aktif yang mau kamu daftarkan premium.</p>
       </div>
       <div class="flex flex-col items-center">
         <div class="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 text-2xl mb-4 shadow-lg shadow-blue-500/10"><i class="fas fa-search"></i></div>
-        <h3 class="font-bold text-sm mb-2">2. Cek Inbox/Spam</h3>
-        <p class="text-[11px] text-[#8b9bb4] px-4">Cari email dari Alight Creative lalu salin link verifikasi.</p>
+        <h3 class="font-bold text-sm mb-2" data-i18n="how.step2.title">2. Cek Inbox & Spam</h3>
+        <p class="text-[11px] text-[#8b9bb4] px-4" data-i18n="how.step2.desc">Cari email dari Alight Creative, salin link verifikasinya.</p>
       </div>
       <div class="flex flex-col items-center">
         <div class="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 text-2xl mb-4 shadow-lg shadow-blue-500/10"><i class="fas fa-check-circle"></i></div>
-        <h3 class="font-bold text-sm mb-2">3. Verifikasi</h3>
-        <p class="text-[11px] text-[#8b9bb4] px-4">Tempel link verifikasi dan premium akan otomatis aktif.</p>
+        <h3 class="font-bold text-sm mb-2" data-i18n="how.step3.title">3. Verifikasi</h3>
+        <p class="text-[11px] text-[#8b9bb4] px-4" data-i18n="how.step3.desc">Tempel link, klik verif, dan premium kamu langsung aktif.</p>
       </div>
     </div>
   </section>
@@ -227,25 +285,69 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
   <!-- TENTANG -->
   <section id="tentang" class="fade-in">
     <div class="glass-card">
-      <h2 class="text-xl font-extrabold mb-4">Tentang Astacloud</h2>
-      <p class="text-xs text-[#8b9bb4] leading-relaxed mb-8">Astacloud adalah website Alight Motion Premium Generator, alat untuk mendapatkan akses premium secara otomatis melalui verifikasi email.</p>
+      <h2 class="text-xl font-extrabold mb-4" data-i18n="about.title">Tentang Astacloud</h2>
+      <p class="text-xs text-[#8b9bb4] leading-relaxed mb-8" data-i18n="about.desc">
+        Astacloud adalah tools sederhana buat bantu kamu mengaktifkan premium Alight Motion secara otomatis lewat verifikasi email. Dibikin buat ngirit waktu, tanpa ribet.
+      </p>
       <div class="space-y-3">
-        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5"><span class="text-[10px] font-bold text-gray-500 tracking-wider">WEBSITE</span><span class="text-xs font-bold">Astacloud</span></div>
-        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5"><span class="text-[10px] font-bold text-gray-500 tracking-wider">PRODUK</span><span class="text-xs font-bold">Alight Motion Premium</span></div>
+        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5">
+          <span class="text-[10px] font-bold text-gray-500 tracking-wider" data-i18n="about.website">WEBSITE</span>
+          <span class="text-xs font-bold">Astacloud</span>
+        </div>
+        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5">
+          <span class="text-[10px] font-bold text-gray-500 tracking-wider" data-i18n="about.product">PRODUK</span>
+          <span class="text-xs font-bold">Alight Motion Premium</span>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- FAQ -->
   <section id="faq" class="fade-in">
-    <h2 class="text-2xl font-extrabold text-center mb-8">Pertanyaan yang Sering Diajukan</h2>
+    <h2 class="text-2xl font-extrabold text-center mb-8" data-i18n="faq.title">Pertanyaan Umum</h2>
     <div class="space-y-3">
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Apa itu Astacloud?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Astacloud adalah platform yang menyediakan generator Alight Motion Premium secara otomatis dan gratis.</div></div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Berapa limit per hari?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Limit 5 akun per hari (global) dan 2 akun per orang (per IP). Reset otomatis jam 00:00 WIB.</div></div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Apakah ini berbayar?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Tidak, layanan ini 100% gratis. Kami hanya meminta Anda memverifikasi email.</div></div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Kenapa link verifikasi tidak masuk?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Coba cek folder Spam atau Promosi di Gmail Anda. Tunggu beberapa menit jika belum masuk.</div></div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Apakah akun saya aman?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Ya, kami hanya menggunakan email Anda untuk proses verifikasi resmi dari Alight Motion.</div></div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Kapan limit di-reset?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Setiap hari jam 00:00 WIB. Setelah itu bisa generate lagi.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-sm" data-i18n="faq.q1">Apa itu Astacloud?</h3>
+          <i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i>
+        </div>
+        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a1">Astacloud adalah website generator Alight Motion Premium yang jalan otomatis dan gratis.</div>
+      </div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-sm" data-i18n="faq.q2">Berapa limit per hari?</h3>
+          <i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i>
+        </div>
+        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a2">Limit 5 akun per hari untuk keseluruhan, dan 2 akun per orang (per IP). Reset otomatis jam 00:00 WIB.</div>
+      </div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-sm" data-i18n="faq.q3">Apakah ini berbayar?</h3>
+          <i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i>
+        </div>
+        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a3">Nggak, 100% gratis. Kami cuma minta kamu verifikasi email buat prosesnya.</div>
+      </div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-sm" data-i18n="faq.q4">Link verifikasi nggak masuk?</h3>
+          <i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i>
+        </div>
+        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a4">Coba cek folder Spam atau Promosi di Gmail. Kalau belum masuk, tunggu 2-5 menit terus refresh.</div>
+      </div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-sm" data-i18n="faq.q5">Data saya aman?</h3>
+          <i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i>
+        </div>
+        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a5">Aman. Email kamu cuma dipakai untuk verifikasi resmi Alight Motion, gak disimpan atau dipakai hal lain.</div>
+      </div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-sm" data-i18n="faq.q6">Kapan limitnya reset?</h3>
+          <i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i>
+        </div>
+        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a6">Setiap hari jam 00:00 WIB. Habis itu kamu bisa generate lagi.</div>
+      </div>
     </div>
   </section>
 
@@ -255,12 +357,12 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
       <img src="assets/asta.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
       <span class="font-extrabold text-lg tracking-tight">Astacloud</span>
     </div>
-    <p class="text-[11px] text-[#8b9bb4] mb-1">Alight Motion Premium</p>
-    <p class="text-[10px] text-gray-600 mb-8">© 2026 Astacloud • All Rights Reserved.</p>
+    <p class="text-[11px] text-[#8b9bb4] mb-1" data-i18n="footer.product">Alight Motion Premium</p>
+    <p class="text-[10px] text-gray-600 mb-8" data-i18n="footer.copyright">© 2026 Astacloud • All Rights Reserved.</p>
     <div class="flex justify-center gap-6 text-xs text-[#8b9bb4] mb-8">
-      <a href="#" class="hover:text-blue-500 transition-colors">Privacy</a>
-      <a href="#" class="hover:text-blue-500 transition-colors">Terms</a>
-      <a href="javascript:void(0)" onclick="openChat()" class="hover:text-blue-500 transition-colors">Contact</a>
+      <a href="#" class="hover:text-blue-500 transition-colors" data-i18n="footer.privacy">Kebijakan Privasi</a>
+      <a href="#" class="hover:text-blue-500 transition-colors" data-i18n="footer.terms">Syarat & Ketentuan</a>
+      <a href="javascript:void(0)" onclick="openChat()" class="hover:text-blue-500 transition-colors" data-i18n="footer.contact">Kontak</a>
     </div>
   </footer>
 
@@ -269,46 +371,135 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 <!-- NAV -->
 <nav class="fixed bottom-0 w-full z-50 bg-[#0a0f1c]/95 backdrop-blur-lg border-t border-white/10 px-2 py-3">
   <div class="max-w-md mx-auto flex justify-between items-center">
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5 active" onclick="scrollToSection('hero')" id="nav-beranda"><div class="nav-indicator"></div><i class="fas fa-home text-lg"></i><span class="text-[10px] font-medium">Beranda</span></div>
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('premium-form')" id="nav-premium"><div class="nav-indicator"></div><i class="fas fa-crown text-lg"></i><span class="text-[10px] font-medium">Premium</span></div>
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('cara-menggunakan')" id="nav-panduan"><div class="nav-indicator"></div><i class="fas fa-list-check text-lg"></i><span class="text-[10px] font-medium">Panduan</span></div>
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('faq')" id="nav-faq"><div class="nav-indicator"></div><i class="fas fa-question-circle text-lg"></i><span class="text-[10px] font-medium">FAQ</span></div>
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="openChat()" id="nav-chat"><div class="nav-indicator"></div><i class="fas fa-comment-dots text-lg"></i><span class="text-[10px] font-medium">Chat</span></div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5 active" onclick="scrollToSection('hero')" id="nav-beranda">
+      <div class="nav-indicator"></div>
+      <i class="fas fa-home text-lg"></i>
+      <span class="text-[10px] font-medium" data-i18n="nav.home">Beranda</span>
+    </div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('premium-form')" id="nav-premium">
+      <div class="nav-indicator"></div>
+      <i class="fas fa-crown text-lg"></i>
+      <span class="text-[10px] font-medium" data-i18n="nav.premium">Premium</span>
+    </div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('cara-menggunakan')" id="nav-panduan">
+      <div class="nav-indicator"></div>
+      <i class="fas fa-list-check text-lg"></i>
+      <span class="text-[10px] font-medium" data-i18n="nav.guide">Panduan</span>
+    </div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('faq')" id="nav-faq">
+      <div class="nav-indicator"></div>
+      <i class="fas fa-question-circle text-lg"></i>
+      <span class="text-[10px] font-medium">FAQ</span>
+    </div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="openChat()" id="nav-chat">
+      <div class="nav-indicator"></div>
+      <i class="fas fa-comment-dots text-lg"></i>
+      <span class="text-[10px] font-medium" data-i18n="nav.chat">Chat</span>
+    </div>
   </div>
 </nav>
 
-<button onclick="openChat()" class="fixed bottom-24 right-4 w-12 h-12 bg-blue-600 rounded-full shadow-lg shadow-blue-500/30 flex items-center justify-center text-white z-40 hover:scale-105 active:scale-95 transition-all"><i class="fas fa-comment-dots text-lg"></i></button>
+<!-- FLOATING CHAT BTN -->
+<button onclick="openChat()" class="fixed bottom-24 right-4 w-12 h-12 bg-blue-600 rounded-full shadow-lg shadow-blue-500/30 flex items-center justify-center text-white z-40 hover:scale-105 active:scale-95 transition-all">
+  <i class="fas fa-comment-dots text-lg"></i>
+</button>
 
 <!-- NAME MODAL -->
 <div id="name-modal">
   <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in">
     <div class="text-center mb-6">
-      <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4 border border-blue-500/30"><i class="fas fa-user text-blue-400 text-2xl"></i></div>
-      <h3 class="font-extrabold text-lg mb-2">Selamat Datang di Public Chat</h3>
-      <p class="text-xs text-[#8b9bb4]">Masukkan nama kamu dulu untuk ikut ngobrol ya!</p>
+      <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
+        <i class="fas fa-user text-blue-400 text-2xl"></i>
+      </div>
+      <h3 class="font-extrabold text-lg mb-2" data-i18n="chat.welcome">Selamat Datang di Public Chat</h3>
+      <p class="text-xs text-[#8b9bb4]" data-i18n="chat.welcomeDesc">Isi nama dulu biar teman-teman kenal kamu 👋</p>
     </div>
-    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">NAMA KAMU</label>
-    <input id="userNameInput" type="text" placeholder="Contoh: Imran" maxlength="20" class="input-field text-sm mb-4">
-    <button onclick="saveUserName()" class="btn-primary text-sm flex items-center justify-center gap-2"><i class="fas fa-paper-plane"></i> Mulai Chatting</button>
-    <button onclick="closeNameModal()" class="w-full py-3 mt-3 rounded-xl bg-white/5 border border-white/10 text-gray-400 font-bold text-xs hover:bg-white/10 transition-colors">Batal</button>
+    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2" data-i18n="chat.yourName">NAMA KAMU</label>
+    <input id="userNameInput" type="text" placeholder="Misal: Imran" maxlength="20" class="input-field text-sm mb-4" data-i18n-placeholder="chat.namePlaceholder">
+    <button onclick="saveUserName()" class="btn-primary text-sm flex items-center justify-center gap-2">
+      <i class="fas fa-paper-plane"></i> <span data-i18n="chat.startBtn">Mulai Ngobrol</span>
+    </button>
+    <button onclick="closeNameModal()" class="w-full py-3 mt-3 rounded-xl bg-white/5 border border-white/10 text-gray-400 font-bold text-xs hover:bg-white/10 transition-colors" data-i18n="chat.cancel">Batal</button>
+  </div>
+</div>
+
+<!-- SUPPORT MODAL -->
+<div id="support-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[90] hidden items-center justify-center p-4">
+  <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in">
+    <div class="flex justify-between items-start mb-5">
+      <div>
+        <h3 class="font-extrabold text-base text-white" data-i18n="support.title">Support Developer</h3>
+        <p class="text-[11px] text-[#8b9bb4] mt-1.5 leading-relaxed" data-i18n="support.subtitle">Dukung Astacloud dengan follow sosmed & channel resmi developer.</p>
+      </div>
+      <button onclick="closeSupportModal()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors shrink-0">
+        <i class="fas fa-times text-xs"></i>
+      </button>
+    </div>
+
+    <div class="space-y-3 mb-6">
+      <a href="https://tiktok.com/@zanncodexdev" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+        <i class="fab fa-tiktok text-xl text-white w-6 text-center"></i>
+        <div class="flex-1">
+          <h4 class="text-xs font-bold text-white">TikTok</h4>
+          <p class="text-[10px] text-[#8b9bb4] mt-0.5">@zanncodexdev</p>
+        </div>
+        <i class="fas fa-external-link-alt text-[10px] text-gray-500"></i>
+      </a>
+      <a href="https://tiktok.com/@zanncode2" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+        <i class="fab fa-tiktok text-xl text-white w-6 text-center"></i>
+        <div class="flex-1">
+          <h4 class="text-xs font-bold text-white">TikTok 2</h4>
+          <p class="text-[10px] text-[#8b9bb4] mt-0.5">@zanncode2</p>
+        </div>
+        <i class="fas fa-external-link-alt text-[10px] text-gray-500"></i>
+      </a>
+      <a href="https://whatsapp.com/channel/0029VbCdCFkI1rceYd2vik31" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+        <i class="fab fa-whatsapp text-xl text-green-400 w-6 text-center"></i>
+        <div class="flex-1">
+          <h4 class="text-xs font-bold text-white" data-i18n="support.waChannel">Saluran WhatsApp</h4>
+          <p class="text-[10px] text-[#8b9bb4] mt-0.5">Astacloud Channel</p>
+        </div>
+        <i class="fas fa-external-link-alt text-[10px] text-gray-500"></i>
+      </a>
+    </div>
+
+    <button onclick="window.open('https://wa.me/62882019782087','_blank')" class="w-full py-3.5 rounded-xl bg-blue-600 text-white font-bold text-xs mb-4 flex items-center justify-center gap-2 hover:bg-blue-500 transition-colors">
+      <i class="fas fa-comment-dots"></i> <span data-i18n="support.contact">Hubungi Developer</span>
+    </button>
+
+    <label class="flex items-center gap-3 text-[11px] text-[#8b9bb4] mb-4 cursor-pointer select-none">
+      <input type="checkbox" id="hideSupportCheck" class="accent-blue-600 w-4 h-4 rounded border-gray-600">
+      <span data-i18n="support.hide24h">Tampilkan lagi setelah 24 jam</span>
+    </label>
+
+    <button onclick="closeSupportModal()" class="w-full py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs hover:bg-white/10 transition-colors" data-i18n="support.close">
+      Tutup
+    </button>
   </div>
 </div>
 
 <!-- CHAT OVERLAY -->
 <div id="chat-overlay" class="fixed inset-0 bg-[#0b141a] z-[70] hidden flex-col w-full h-full overflow-hidden fade-in">
   <div class="p-3 border-b border-white/10 flex items-center gap-3 bg-[#202c33] shrink-0">
-    <button onclick="closeChat()" class="text-gray-400 hover:text-white w-9 h-9 rounded-full hover:bg-white/10 flex items-center justify-center"><i class="fas fa-arrow-left text-base"></i></button>
+    <button onclick="closeChat()" class="text-gray-400 hover:text-white w-9 h-9 rounded-full hover:bg-white/10 flex items-center justify-center">
+      <i class="fas fa-arrow-left text-base"></i>
+    </button>
     <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold relative shrink-0">
       <i class="fas fa-users"></i>
       <span class="absolute bottom-0 right-0 online-dot border-2 border-[#202c33]"></span>
     </div>
     <div class="flex-1 min-w-0">
-      <h3 class="text-white font-bold text-sm truncate">Public Chat Astacloud</h3>
-      <p class="text-[11px] text-green-400 flex items-center gap-1.5"><span class="online-dot"></span> <span id="online-count">Online</span></p>
+      <h3 class="text-white font-bold text-sm truncate" data-i18n="chat.headerTitle">Public Chat Astacloud</h3>
+      <p class="text-[11px] text-green-400 flex items-center gap-1.5">
+        <span class="online-dot"></span>
+        <span id="online-count">Online</span>
+      </p>
     </div>
   </div>
 
   <div id="chat-messages" class="flex-1 overflow-y-auto py-3 flex flex-col"></div>
+
+  <div id="typing-indicator" class="hidden px-4 py-1.5 text-[11px] text-green-400 italic bg-[#0b141a]"></div>
 
   <div id="reply-preview" class="reply-preview">
     <i class="fas fa-reply text-[#53bdeb] text-xs"></i>
@@ -316,32 +507,414 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
       <div id="reply-preview-name" class="text-[11px] font-bold text-[#53bdeb]">Balas</div>
       <div id="reply-preview-text" class="text-[11px] text-gray-300 truncate">-</div>
     </div>
-    <button onclick="cancelReply()" class="w-6 h-6 rounded-full hover:bg-white/10 flex items-center justify-center text-gray-400"><i class="fas fa-times text-xs"></i></button>
+    <button onclick="cancelReply()" class="w-6 h-6 rounded-full hover:bg-white/10 flex items-center justify-center text-gray-400">
+      <i class="fas fa-times text-xs"></i>
+    </button>
   </div>
 
   <div class="p-2 border-t border-white/10 bg-[#202c33] flex gap-2 items-end shrink-0">
     <div class="flex-1 bg-[#2a3942] rounded-3xl flex items-center px-4 py-2.5 min-h-[46px]">
-      <input type="text" id="chat-input" placeholder="Ketik pesan..." class="flex-1 bg-transparent border-none text-sm text-white focus:outline-none placeholder-gray-500" maxlength="500">
+      <input type="text" id="chat-input" placeholder="Ketik pesan..." class="flex-1 bg-transparent border-none text-sm text-white focus:outline-none placeholder-gray-500" maxlength="500" data-i18n-placeholder="chat.inputPlaceholder">
     </div>
-    <button onclick="sendChatMessage()" class="w-11 h-11 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center transition-all active:scale-95 shrink-0"><i class="fas fa-paper-plane text-sm"></i></button>
+    <button onclick="sendChatMessage()" class="w-11 h-11 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center transition-all active:scale-95 shrink-0">
+      <i class="fas fa-paper-plane text-sm"></i>
+    </button>
   </div>
 </div>
 
 <script>
-// ================= UI HELPERS =================
-let gridStatus = localStorage.getItem('grid') !== 'off';
-function updateGridUI(){const b=document.getElementById('grid-toggle-btn');if(gridStatus){document.body.classList.add('grid-active');b.classList.add('text-blue-400');}else{document.body.classList.remove('grid-active');b.classList.remove('text-blue-400');}}
-function toggleGrid(){gridStatus=!gridStatus;localStorage.setItem('grid',gridStatus?'on':'off');updateGridUI();}
-updateGridUI();
+// ============================================================
+// TRANSLATIONS
+// ============================================================
+const TRANSLATIONS = {
+  id: {
+    'hero.badge': 'ASTACLOUD • PREMIUM GENERATOR',
+    'hero.title1': 'Alight Motion',
+    'hero.title2': 'Premium',
+    'hero.subtitle': 'Buka semua fitur premium Alight Motion dalam hitungan menit ✨',
+    'hero.btn1': 'Ambil Premium Sekarang',
+    'hero.btn2': 'Pelajari Cara Kerjanya',
+    'form.title': 'Generator Premium AM',
+    'form.subtitle': 'Verifikasi via email resmi',
+    'form.limitTitle': 'Limit Harian',
+    'form.limitLeft': 'Sisa',
+    'form.limitReset': 'Reset',
+    'form.tabSend': 'Kirim',
+    'form.tabVerify': 'Verifikasi',
+    'form.emailLabel': 'ALAMAT EMAIL',
+    'form.emailPlaceholder': 'kamu@gmail.com',
+    'form.sendBtn': 'Kirim Link',
+    'form.linkLabel': 'LINK VERIFIKASI',
+    'form.linkPlaceholder': 'Tempel link dari email...',
+    'form.verifyBtn': 'Aktifkan Premium',
+    'why.title': 'Kenapa Astacloud?',
+    'why.subtitle': 'Dibuat simpel, dibangun untuk kecepatan — fokus ke satu hal: bikin kamu dapat premium tanpa ribet.',
+    'why.card1.title': 'Proses Kilat',
+    'why.card1.desc': 'Cuma butuh beberapa menit dari kirim email sampai premium aktif.',
+    'why.card2.title': 'Aman & Transparan',
+    'why.card2.desc': 'Email kamu cuma dipakai buat verifikasi resmi — gak disimpan, gak disalahgunakan.',
+    'why.card3.title': 'Gratis Sepenuhnya',
+    'why.card3.desc': 'Nggak ada biaya tersembunyi. Cukup verifikasi email, langsung bisa pakai.',
+    'how.title': 'Cara Pakai',
+    'how.subtitle': 'Tiga langkah simpel, langsung jadi.',
+    'how.step1.title': '1. Masukkan Email',
+    'how.step1.desc': 'Pakai email aktif yang mau kamu daftarkan premium.',
+    'how.step2.title': '2. Cek Inbox & Spam',
+    'how.step2.desc': 'Cari email dari Alight Creative, salin link verifikasinya.',
+    'how.step3.title': '3. Verifikasi',
+    'how.step3.desc': 'Tempel link, klik verif, dan premium kamu langsung aktif.',
+    'about.title': 'Tentang Astacloud',
+    'about.desc': 'Astacloud adalah tools sederhana buat bantu kamu mengaktifkan premium Alight Motion secara otomatis lewat verifikasi email. Dibikin buat ngirit waktu, tanpa ribet.',
+    'about.website': 'WEBSITE',
+    'about.product': 'PRODUK',
+    'faq.title': 'Pertanyaan Umum',
+    'faq.q1': 'Apa itu Astacloud?',
+    'faq.a1': 'Astacloud adalah website generator Alight Motion Premium yang jalan otomatis dan gratis.',
+    'faq.q2': 'Berapa limit per hari?',
+    'faq.a2': 'Limit 5 akun per hari untuk keseluruhan, dan 2 akun per orang (per IP). Reset otomatis jam 00:00 WIB.',
+    'faq.q3': 'Apakah ini berbayar?',
+    'faq.a3': 'Nggak, 100% gratis. Kami cuma minta kamu verifikasi email buat prosesnya.',
+    'faq.q4': 'Link verifikasi nggak masuk?',
+    'faq.a4': 'Coba cek folder Spam atau Promosi di Gmail. Kalau belum masuk, tunggu 2-5 menit terus refresh.',
+    'faq.q5': 'Data saya aman?',
+    'faq.a5': 'Aman. Email kamu cuma dipakai untuk verifikasi resmi Alight Motion, gak disimpan atau dipakai hal lain.',
+    'faq.q6': 'Kapan limitnya reset?',
+    'faq.a6': 'Setiap hari jam 00:00 WIB. Habis itu kamu bisa generate lagi.',
+    'footer.product': 'Alight Motion Premium',
+    'footer.copyright': '© 2026 Astacloud • All Rights Reserved.',
+    'footer.privacy': 'Kebijakan Privasi',
+    'footer.terms': 'Syarat & Ketentuan',
+    'footer.contact': 'Kontak',
+    'nav.home': 'Beranda',
+    'nav.premium': 'Premium',
+    'nav.guide': 'Panduan',
+    'nav.chat': 'Chat',
+    'chat.welcome': 'Selamat Datang di Public Chat',
+    'chat.welcomeDesc': 'Isi nama dulu biar teman-teman kenal kamu 👋',
+    'chat.yourName': 'NAMA KAMU',
+    'chat.namePlaceholder': 'Misal: Imran',
+    'chat.startBtn': 'Mulai Ngobrol',
+    'chat.cancel': 'Batal',
+    'chat.headerTitle': 'Public Chat Astacloud',
+    'chat.inputPlaceholder': 'Ketik pesan...',
+    'support.title': 'Support Developer',
+    'support.subtitle': 'Dukung Astacloud dengan follow sosmed & channel resmi developer.',
+    'support.waChannel': 'Saluran WhatsApp',
+    'support.contact': 'Hubungi Developer',
+    'support.hide24h': 'Tampilkan lagi setelah 24 jam',
+    'support.close': 'Tutup',
+    'toast.linkSent': 'Link terkirim ke',
+    'toast.premiumActive': 'Premium berhasil diaktifkan!',
+    'toast.limitReached': 'Limit harian habis',
+    'toast.invalidEmail': 'Masukkan email yang valid dulu ya',
+    'toast.pasteLink': 'Paste link verifikasi dari email',
+    'toast.sendEmailFirst': 'Kirim email dulu ya',
+    'toast.networkError': 'Network error',
+    'toast.copied': 'URL disalin',
+    'toast.pasted': 'Link ditempel!',
+    'toast.typing': 'sedang mengetik',
+    'toast.typingPlural': 'orang sedang mengetik',
+    'chat.leaving': 'Terputus, mencoba reconnect...',
+    'chat.today': 'Hari Ini'
+  },
+  en: {
+    'hero.badge': 'ASTACLOUD • PREMIUM GENERATOR',
+    'hero.title1': 'Alight Motion',
+    'hero.title2': 'Premium',
+    'hero.subtitle': 'Unlock all Alight Motion premium features in minutes ✨',
+    'hero.btn1': 'Get Premium Now',
+    'hero.btn2': 'Learn How It Works',
+    'form.title': 'AM Premium Generator',
+    'form.subtitle': 'Verified via official email',
+    'form.limitTitle': 'Daily Limit',
+    'form.limitLeft': 'Left',
+    'form.limitReset': 'Reset',
+    'form.tabSend': 'Send',
+    'form.tabVerify': 'Verify',
+    'form.emailLabel': 'EMAIL ADDRESS',
+    'form.emailPlaceholder': 'you@gmail.com',
+    'form.sendBtn': 'Send Link',
+    'form.linkLabel': 'VERIFICATION LINK',
+    'form.linkPlaceholder': 'Paste link from email...',
+    'form.verifyBtn': 'Activate Premium',
+    'why.title': 'Why Astacloud?',
+    'why.subtitle': 'Simple by design, built for speed — focused on one thing: getting you premium without the hassle.',
+    'why.card1.title': 'Lightning Fast',
+    'why.card1.desc': 'Takes only a few minutes from sending email to premium activation.',
+    'why.card2.title': 'Safe & Transparent',
+    'why.card2.desc': 'Your email is only used for official verification — never stored, never misused.',
+    'why.card3.title': 'Completely Free',
+    'why.card3.desc': 'No hidden fees. Just verify your email and you\'re good to go.',
+    'how.title': 'How to Use',
+    'how.subtitle': 'Three simple steps, done in no time.',
+    'how.step1.title': '1. Enter Email',
+    'how.step1.desc': 'Use an active email you want to register for premium.',
+    'how.step2.title': '2. Check Inbox & Spam',
+    'how.step2.desc': 'Look for an email from Alight Creative, copy the verification link.',
+    'how.step3.title': '3. Verify',
+    'how.step3.desc': 'Paste the link, click verify, and your premium activates instantly.',
+    'about.title': 'About Astacloud',
+    'about.desc': 'Astacloud is a simple tool that helps you activate Alight Motion premium automatically via email verification. Built to save time, no hassle.',
+    'about.website': 'WEBSITE',
+    'about.product': 'PRODUCT',
+    'faq.title': 'Frequently Asked Questions',
+    'faq.q1': 'What is Astacloud?',
+    'faq.a1': 'Astacloud is an Alight Motion Premium generator website that runs automatically and free.',
+    'faq.q2': 'What\'s the daily limit?',
+    'faq.a2': '5 accounts per day globally, and 2 accounts per person (per IP). Auto-resets at 00:00 WIB.',
+    'faq.q3': 'Is this paid?',
+    'faq.a3': 'No, 100% free. We only ask you to verify your email for the process.',
+    'faq.q4': 'Verification link not received?',
+    'faq.a4': 'Check Spam or Promotions folder in Gmail. If still missing, wait 2-5 minutes and refresh.',
+    'faq.q5': 'Is my data safe?',
+    'faq.a5': 'Safe. Your email is only used for official Alight Motion verification, not stored or used for anything else.',
+    'faq.q6': 'When does the limit reset?',
+    'faq.a6': 'Every day at 00:00 WIB (UTC+7). After that you can generate again.',
+    'footer.product': 'Alight Motion Premium',
+    'footer.copyright': '© 2026 Astacloud • All Rights Reserved.',
+    'footer.privacy': 'Privacy Policy',
+    'footer.terms': 'Terms & Conditions',
+    'footer.contact': 'Contact',
+    'nav.home': 'Home',
+    'nav.premium': 'Premium',
+    'nav.guide': 'Guide',
+    'nav.chat': 'Chat',
+    'chat.welcome': 'Welcome to Public Chat',
+    'chat.welcomeDesc': 'Enter your name so friends can recognize you 👋',
+    'chat.yourName': 'YOUR NAME',
+    'chat.namePlaceholder': 'e.g. Imran',
+    'chat.startBtn': 'Start Chatting',
+    'chat.cancel': 'Cancel',
+    'chat.headerTitle': 'Astacloud Public Chat',
+    'chat.inputPlaceholder': 'Type a message...',
+    'support.title': 'Support Developer',
+    'support.subtitle': 'Support Astacloud by following the developer\'s social media & channels.',
+    'support.waChannel': 'WhatsApp Channel',
+    'support.contact': 'Contact Developer',
+    'support.hide24h': 'Show again after 24 hours',
+    'support.close': 'Close',
+    'toast.linkSent': 'Link sent to',
+    'toast.premiumActive': 'Premium activated successfully!',
+    'toast.limitReached': 'Daily limit reached',
+    'toast.invalidEmail': 'Please enter a valid email first',
+    'toast.pasteLink': 'Paste the verification link from your email',
+    'toast.sendEmailFirst': 'Send email first',
+    'toast.networkError': 'Network error',
+    'toast.copied': 'URL copied',
+    'toast.pasted': 'Link pasted!',
+    'toast.typing': 'is typing',
+    'toast.typingPlural': 'people are typing',
+    'chat.leaving': 'Disconnected, reconnecting...',
+    'chat.today': 'Today'
+  },
+  jp: {
+    'hero.badge': 'ASTACLOUD • プレミアムジェネレーター',
+    'hero.title1': 'Alight Motion',
+    'hero.title2': 'プレミアム',
+    'hero.subtitle': '数分で Alight Motion のプレミアム機能をすべて解放 ✨',
+    'hero.btn1': '今すぐプレミアムを取得',
+    'hero.btn2': '使い方を見る',
+    'form.title': 'AM プレミアムジェネレーター',
+    'form.subtitle': '公式メールで認証',
+    'form.limitTitle': '1日の制限',
+    'form.limitLeft': '残り',
+    'form.limitReset': 'リセット',
+    'form.tabSend': '送信',
+    'form.tabVerify': '認証',
+    'form.emailLabel': 'メールアドレス',
+    'form.emailPlaceholder': 'you@gmail.com',
+    'form.sendBtn': 'リンクを送信',
+    'form.linkLabel': '認証リンク',
+    'form.linkPlaceholder': 'メールのリンクを貼り付け...',
+    'form.verifyBtn': 'プレミアムを有効化',
+    'why.title': 'Astacloud の特徴',
+    'why.subtitle': 'シンプルで速い — 手間なくプレミアムを取得することだけに集中しています。',
+    'why.card1.title': '超高速',
+    'why.card1.desc': 'メール送信から認証までわずか数分で完了します。',
+    'why.card2.title': '安全・透明',
+    'why.card2.desc': 'メールは公式認証のみに使用され、保存や悪用は一切ありません。',
+    'why.card3.title': '完全無料',
+    'why.card3.desc': '隠れた費用は一切ありません。メール認証だけで即使えます。',
+    'how.title': '使い方',
+    'how.subtitle': 'シンプルな3ステップですぐ完了。',
+    'how.step1.title': '1. メールを入力',
+    'how.step1.desc': 'プレミアム登録したい有効なメールを使用してください。',
+    'how.step2.title': '2. 受信箱と迷惑メールを確認',
+    'how.step2.desc': 'Alight Creative からのメールを探し、認証リンクをコピーします。',
+    'how.step3.title': '3. 認証',
+    'how.step3.desc': 'リンクを貼り付けて認証をクリックすると、すぐにプレミアムが有効になります。',
+    'about.title': 'Astacloud について',
+    'about.desc': 'Astacloud は、メール認証を通じて Alight Motion プレミアムを自動で有効化するシンプルなツールです。時間を節約するために作られました。',
+    'about.website': 'ウェブサイト',
+    'about.product': '製品',
+    'faq.title': 'よくある質問',
+    'faq.q1': 'Astacloud とは？',
+    'faq.a1': 'Astacloud は、自動で動作する無料の Alight Motion プレミアムジェネレーターサイトです。',
+    'faq.q2': '1日の制限は？',
+    'faq.a2': '全体で1日5アカウント、1人（IPごと）につき2アカウントまで。00:00 WIB に自動リセットされます。',
+    'faq.q3': '有料ですか？',
+    'faq.a3': 'いいえ、100%無料です。認証のためメール確認のみお願いしています。',
+    'faq.q4': '認証リンクが届きません',
+    'faq.a4': 'Gmail の迷惑メールまたはプロモーションフォルダを確認してください。届かない場合は 2〜5 分待って更新してください。',
+    'faq.q5': 'データは安全ですか？',
+    'faq.a5': '安全です。メールは Alight Motion の公式認証のみに使用され、保存や他の用途には使用しません。',
+    'faq.q6': '制限はいつリセットされますか？',
+    'faq.a6': '毎日 00:00 WIB (UTC+7) にリセットされます。その後また生成できます。',
+    'footer.product': 'Alight Motion プレミアム',
+    'footer.copyright': '© 2026 Astacloud • All Rights Reserved.',
+    'footer.privacy': 'プライバシーポリシー',
+    'footer.terms': '利用規約',
+    'footer.contact': 'お問い合わせ',
+    'nav.home': 'ホーム',
+    'nav.premium': 'プレミアム',
+    'nav.guide': 'ガイド',
+    'nav.chat': 'チャット',
+    'chat.welcome': 'パブリックチャットへようこそ',
+    'chat.welcomeDesc': '名前を入力して友達に認識してもらいましょう 👋',
+    'chat.yourName': 'あなたの名前',
+    'chat.namePlaceholder': '例: イムラン',
+    'chat.startBtn': 'チャットを始める',
+    'chat.cancel': 'キャンセル',
+    'chat.headerTitle': 'Astacloud パブリックチャット',
+    'chat.inputPlaceholder': 'メッセージを入力...',
+    'support.title': '開発者をサポート',
+    'support.subtitle': '開発者の SNS と公式チャンネルをフォローして Astacloud を応援してください。',
+    'support.waChannel': 'WhatsApp チャンネル',
+    'support.contact': '開発者に連絡',
+    'support.hide24h': '24時間後に再度表示',
+    'support.close': '閉じる',
+    'toast.linkSent': 'リンクを送信しました:',
+    'toast.premiumActive': 'プレミアムが有効になりました！',
+    'toast.limitReached': '1日の制限に達しました',
+    'toast.invalidEmail': '有効なメールアドレスを入力してください',
+    'toast.pasteLink': 'メールの認証リンクを貼り付けてください',
+    'toast.sendEmailFirst': '先にメールを送信してください',
+    'toast.networkError': 'ネットワークエラー',
+    'toast.copied': 'URLをコピーしました',
+    'toast.pasted': 'リンクを貼り付けました！',
+    'toast.typing': 'が入力中',
+    'toast.typingPlural': '人が入力中',
+    'chat.leaving': '切断されました、再接続中...',
+    'chat.today': '今日'
+  }
+};
 
-function scrollToSection(id){const s=document.getElementById(id);if(s){const off=80;const pos=s.getBoundingClientRect().top+window.pageYOffset-off;window.scrollTo({top:pos,behavior:'smooth'});}}
-function toggleFaq(el){document.querySelectorAll('.faq-item').forEach(i=>{if(i!==el)i.classList.remove('active');});el.classList.toggle('active');}
-function toast(msg,type='info'){const c={ok:'border-green-500/50 text-green-200 bg-green-900/40',err:'border-red-500/50 text-red-200 bg-red-900/40',info:'border-blue-500/50 text-blue-200 bg-blue-900/40'};const t=document.createElement('div');t.className=`toast ${c[type]}`;t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
+let currentLang = localStorage.getItem('astacloud_lang') || 'id';
+
+function t(key) {
+  return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || (TRANSLATIONS['id'][key]) || key;
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if (val) el.textContent = val;
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const val = t(key);
+    if (val) el.setAttribute('placeholder', val);
+  });
+
+  // Update HTML lang attribute
+  document.documentElement.lang = currentLang === 'jp' ? 'ja' : currentLang;
+
+  // Update lang button
+  const flags = { id: '🇮🇩', en: '🇬🇧', jp: '🇯🇵' };
+  const codes = { id: 'ID', en: 'EN', jp: 'JP' };
+  document.getElementById('lang-flag-current').textContent = flags[currentLang];
+  document.getElementById('lang-code-current').textContent = codes[currentLang];
+
+  // Update active state in menu
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.lang === currentLang);
+  });
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('astacloud_lang', lang);
+  applyTranslations();
+  closeLangMenu();
+  toast(t('toast.copied').replace(t('toast.copied'), `✓ ${lang.toUpperCase()}`), 'ok');
+}
+
+function toggleLangMenu() {
+  document.getElementById('lang-menu').classList.toggle('show');
+}
+function closeLangMenu() {
+  document.getElementById('lang-menu').classList.remove('show');
+}
+
+// Close lang menu on outside click
+document.addEventListener('click', (e) => {
+  const btn = document.getElementById('lang-btn');
+  const menu = document.getElementById('lang-menu');
+  if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+    closeLangMenu();
+  }
+});
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+let gridStatus = localStorage.getItem('astacloud_grid') !== 'off';
+function updateGridUI(){
+  const b = document.getElementById('grid-toggle-btn');
+  if(gridStatus){document.body.classList.add('grid-active');b.classList.add('text-blue-400');}
+  else{document.body.classList.remove('grid-active');b.classList.remove('text-blue-400');}
+}
+function toggleGrid(){gridStatus=!gridStatus;localStorage.setItem('astacloud_grid',gridStatus?'on':'off');updateGridUI();}
+
+function scrollToSection(id){
+  const s = document.getElementById(id);
+  if(s){
+    const off = 80;
+    const pos = s.getBoundingClientRect().top + window.pageYOffset - off;
+    window.scrollTo({top:pos,behavior:'smooth'});
+  }
+}
+window.addEventListener('scroll',()=>{
+  const sections = ['hero','premium-form','cara-menggunakan','faq'];
+  const navIds = ['beranda','premium','panduan','faq'];
+  let cur = 'beranda';
+  sections.forEach((id,i)=>{
+    const s = document.getElementById(id);
+    if(s && window.pageYOffset >= s.offsetTop - 120) cur = navIds[i];
+  });
+  [...navIds,'chat'].forEach(id=>{
+    const el = document.getElementById(`nav-${id}`);
+    if(el) el.classList.remove('active');
+  });
+  const curEl = document.getElementById(`nav-${cur}`);
+  if(curEl) curEl.classList.add('active');
+});
+
+function toggleFaq(el){
+  document.querySelectorAll('.faq-item').forEach(i=>{if(i!==el)i.classList.remove('active');});
+  el.classList.toggle('active');
+}
+
+function toast(msg,type='info'){
+  const c = {
+    ok:'border-green-500/50 text-green-200 bg-green-900/40',
+    err:'border-red-500/50 text-red-200 bg-red-900/40',
+    info:'border-blue-500/50 text-blue-200 bg-blue-900/40'
+  };
+  const t2 = document.createElement('div');
+  t2.className = `toast ${c[type]}`;
+  t2.innerHTML = msg;
+  document.body.appendChild(t2);
+  setTimeout(()=>t2.remove(),3500);
+}
 function loading(btn,text){btn.disabled=true;btn.dataset.orig=btn.innerHTML;btn.innerHTML=`<span class="spinner"></span> <span class="ml-2">${text}</span>`;}
 function reset(btn){btn.disabled=false;if(btn.dataset.orig)btn.innerHTML=btn.dataset.orig;}
-function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+function escapeHtmlChat(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
 
-// ================= DAILY LIMIT (sama kayak sebelumnya) =================
+// ============================================================
+// DAILY LIMIT
+// ============================================================
 let limitReached = false;
 async function loadDailyStatus() {
   try {
@@ -363,30 +936,34 @@ async function loadDailyStatus() {
     if (sisa <= 0) {
       limitReached = true;
       btnSend.disabled = true;
-      btnSend.innerHTML = '<i class="fas fa-lock"></i> Limit Habis';
-      msgEl.textContent = '⚠️ Limit harian habis. Reset jam 00:00 WIB.';
-      msgEl.classList.remove('hidden'); msgEl.classList.add('text-red-400');
+      btnSend.innerHTML = '<i class="fas fa-lock"></i> ' + t('toast.limitReached');
+      msgEl.textContent = '⚠️ ' + t('toast.limitReached') + '. Reset 00:00 WIB.';
+      msgEl.classList.remove('hidden');
+      msgEl.classList.add('text-red-400');
     } else if (ipCount >= ipMax) {
       limitReached = true;
       btnSend.disabled = true;
       btnSend.innerHTML = '<i class="fas fa-lock"></i> IP Limit';
-      msgEl.textContent = `⚠️ Kamu sudah pakai ${ipCount}/${ipMax} akun. Tunggu besok ya.`;
-      msgEl.classList.remove('hidden'); msgEl.classList.add('text-yellow-400');
+      msgEl.textContent = `⚠️ ${ipCount}/${ipMax}`;
+      msgEl.classList.remove('hidden');
+      msgEl.classList.add('text-yellow-400');
     } else {
       limitReached = false;
       btnSend.disabled = false;
-      btnSend.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
-      msgEl.textContent = `IP ini: ${ipCount}/${ipMax} akun hari ini`;
+      btnSend.innerHTML = '<i class="fas fa-paper-plane"></i> ' + t('form.sendBtn');
+      msgEl.textContent = `IP: ${ipCount}/${ipMax}`;
       msgEl.classList.remove('hidden', 'text-red-400', 'text-yellow-400');
       msgEl.classList.add('text-[#8b9bb4]');
     }
   } catch (e) {}
 }
 
-// ================= GENERATOR =================
+// ============================================================
+// GENERATOR
+// ============================================================
 let isVerifiedUnlocked = false, lastEmail = '';
 function switchGenTab(tab){
-  if(tab==='verify' && !isVerifiedUnlocked){toast('Kirim email dulu sebelum ke step Verif','err');return;}
+  if(tab==='verify' && !isVerifiedUnlocked){toast(t('toast.sendEmailFirst'),'err');return;}
   const tabSend=document.getElementById('tab-send'), tabVerify=document.getElementById('tab-verify');
   const panelSend=document.getElementById('panel-send'), panelVerify=document.getElementById('panel-verify');
   if(tab==='send'){
@@ -399,76 +976,143 @@ function switchGenTab(tab){
     panelVerify.classList.remove('hidden');panelSend.classList.add('hidden');
   }
 }
-function copySendLink(){const email=document.getElementById('sendEmail').value.trim()||'email@example.com';copyToClipboard(`${location.origin}/send?email=${encodeURIComponent(email)}`);}
-function copyToClipboard(text){if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>toast('URL disalin','ok')).catch(()=>fallbackCopy(text));}else fallbackCopy(text);}
-function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('URL disalin','ok');}catch(e){toast('Gagal','err');}document.body.removeChild(ta);}
-function pasteVerifyLink(){if(navigator.clipboard&&navigator.clipboard.readText){navigator.clipboard.readText().then(t=>{if(t){document.getElementById('verifyLink').value=t;toast('Link ditempel!','ok');}}).catch(()=>toast('Gagal tempel','err'));}else toast('Browser tidak mendukung','err');}
+
+function copySendLink(){
+  const email = document.getElementById('sendEmail').value.trim() || 'email@example.com';
+  copyToClipboard(`${location.origin}/send?email=${encodeURIComponent(email)}`);
+}
+function copyToClipboard(text){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>toast(t('toast.copied'),'ok')).catch(()=>fallbackCopy(text));
+  } else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');toast(t('toast.copied'),'ok');}catch(e){toast('Gagal','err');}
+  document.body.removeChild(ta);
+}
+function pasteVerifyLink(){
+  if(navigator.clipboard && navigator.clipboard.readText){
+    navigator.clipboard.readText().then(t2=>{
+      if(t2){document.getElementById('verifyLink').value=t2;toast(t('toast.pasted'),'ok');}
+    }).catch(()=>toast('Gagal tempel','err'));
+  } else toast('Browser tidak mendukung','err');
+}
 
 async function submitEmail(){
-  if (limitReached) { toast('⚠️ Limit harian habis','err'); return; }
-  const email=document.getElementById('sendEmail').value.trim();
-  const btn=document.getElementById('btnSend');
-  if(!email||!/@/.test(email)){toast('Masukkan email valid','err');return;}
-  loading(btn,'Mengirim...');
+  if (limitReached) { toast('⚠️ ' + t('toast.limitReached'),'err'); return; }
+  const email = document.getElementById('sendEmail').value.trim();
+  const btn = document.getElementById('btnSend');
+  if(!email || !/@/.test(email)){toast(t('toast.invalidEmail'),'err');return;}
+  loading(btn,'...');
   try{
-    const r=await fetch('/send',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email})});
-    const d=await r.json();
+    const r = await fetch('/send',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({email})
+    });
+    const d = await r.json();
     if(d.ok){
-      lastEmail=email;isVerifiedUnlocked=true;
-      const tabVerify=document.getElementById('tab-verify');
-      tabVerify.disabled=false;tabVerify.classList.remove('cursor-not-allowed','opacity-50');
-      document.getElementById('sendEmail').value='';
-      toast('✅ Link terkirim ke <b>'+email+'</b>','ok');
-      switchGenTab('verify'); loadDailyStatus();
+      lastEmail = email; isVerifiedUnlocked = true;
+      const tabVerify = document.getElementById('tab-verify');
+      tabVerify.disabled = false; tabVerify.classList.remove('cursor-not-allowed','opacity-50');
+      document.getElementById('sendEmail').value = '';
+      toast('✅ ' + t('toast.linkSent') + ' <b>' + email + '</b>','ok');
+      switchGenTab('verify');
+      loadDailyStatus();
     } else {
       if (d.code === 'GLOBAL_LIMIT' || d.code === 'IP_LIMIT') {
         limitReached = true; btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-lock"></i> Limit';
       }
-      toast('❌ '+(d.why||'Gagal kirim'),'err');
+      toast('❌ ' + (d.why || t('toast.networkError')),'err');
     }
-  }catch(e){toast('❌ Network error: '+e.message,'err');}
-  finally{reset(btn);loadDailyStatus();}
+  } catch(e) { toast('❌ ' + t('toast.networkError'),'err'); }
+  finally { reset(btn); loadDailyStatus(); }
 }
 
 async function submitUrl(){
-  const link=document.getElementById('verifyLink').value.trim();
-  const btn=document.getElementById('btnVerify');
-  const resEl=document.getElementById('verifyResult');
-  if(!link){toast('Paste link verifikasi','err');return;}
-  if(!lastEmail){toast('Kirim email dulu ya','err');return;}
-  loading(btn,'Memproses...');
+  const link = document.getElementById('verifyLink').value.trim();
+  const btn = document.getElementById('btnVerify');
+  const resEl = document.getElementById('verifyResult');
+  if(!link){toast(t('toast.pasteLink'),'err');return;}
+  if(!lastEmail){toast(t('toast.sendEmailFirst'),'err');return;}
+  loading(btn,'...');
   try{
-    const r=await fetch('/verify',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email:lastEmail,link})});
-    const d=await r.json();
+    const r = await fetch('/verify',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({email:lastEmail,link})
+    });
+    const d = await r.json();
     if(d.ok){
       document.getElementById('verify-input-group').classList.add('hidden');
-      resEl.innerHTML=`<div class="space-y-4 text-center py-2 fade-in"><div class="bg-green-500/10 border border-green-500/40 rounded-2xl p-5 text-green-200"><div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto text-green-400 text-lg mb-3"><i class="fas fa-check"></i></div><h3 class="font-extrabold text-sm mb-3">PREMIUM SUCCESS!</h3><div class="bg-black/30 rounded-xl p-4 text-center space-y-2 text-xs"><div class="text-gray-400">📧 ${escapeHtml(d.email)}</div><div class="font-mono text-blue-400 font-extrabold text-lg">${escapeHtml(d.order)}</div><div class="text-green-400 font-bold text-xs">${escapeHtml(d.status)}</div><div class="text-[#8b9bb4] mt-2">Sisa hari ini: <b class="text-green-400">${d.sisa ?? 0}</b></div></div><p class="text-[11px] text-gray-300 mt-3">Login di app Alight Motion pakai email di atas ya~</p></div><button onclick="resetGenerator()" class="btn-primary text-sm flex items-center justify-center gap-2"><i class="fas fa-redo"></i> Ulang</button></div>`;
-      toast('🎉 Premium berhasil diaktifkan!','ok');
+      resEl.innerHTML = `<div class="space-y-4 text-center py-2 fade-in">
+        <div class="bg-green-500/10 border border-green-500/40 rounded-2xl p-5 text-green-200">
+          <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto text-green-400 text-lg mb-3">
+            <i class="fas fa-check"></i>
+          </div>
+          <h3 class="font-extrabold text-sm mb-3">🎉 ${t('toast.premiumActive')}</h3>
+          <div class="bg-black/30 rounded-xl p-4 text-center space-y-2 text-xs">
+            <div class="text-gray-400">📧 ${escapeHtmlChat(d.email)}</div>
+            <div class="font-mono text-blue-400 font-extrabold text-lg">${escapeHtmlChat(d.order)}</div>
+            <div class="text-green-400 font-bold text-xs">${escapeHtmlChat(d.status)}</div>
+          </div>
+        </div>
+        <button onclick="resetGenerator()" class="btn-primary text-sm flex items-center justify-center gap-2">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>`;
+      toast('🎉 ' + t('toast.premiumActive'),'ok');
     } else {
-      if (d.code === 'GLOBAL_LIMIT' || d.code === 'IP_LIMIT') toast('⚠️ Limit harian habis','err');
-      else toast('❌ '+(d.why||'Gagal verifikasi'),'err');
+      if (d.code === 'GLOBAL_LIMIT' || d.code === 'IP_LIMIT') toast('⚠️ ' + t('toast.limitReached'),'err');
+      else toast('❌ ' + (d.why || t('toast.networkError')),'err');
     }
-  }catch(e){toast('❌ Network error: '+e.message,'err');}
-  finally{reset(btn);loadDailyStatus();}
+  } catch(e) { toast('❌ ' + t('toast.networkError'),'err'); }
+  finally { reset(btn); loadDailyStatus(); }
 }
 function resetGenerator(){
   document.getElementById('verify-input-group').classList.remove('hidden');
-  document.getElementById('verifyResult').innerHTML='';
-  document.getElementById('verifyLink').value='';
-  lastEmail='';isVerifiedUnlocked=false;
-  const tabVerify=document.getElementById('tab-verify');
-  tabVerify.disabled=true;tabVerify.classList.add('cursor-not-allowed','opacity-50');
+  document.getElementById('verifyResult').innerHTML = '';
+  document.getElementById('verifyLink').value = '';
+  lastEmail = ''; isVerifiedUnlocked = false;
+  const tabVerify = document.getElementById('tab-verify');
+  tabVerify.disabled = true; tabVerify.classList.add('cursor-not-allowed','opacity-50');
   switchGenTab('send');
 }
 
-// ================= CHAT PERSIST + ONLINE (Polling) =================
-let userName = localStorage.getItem('chatUserName') || '';
+// ============================================================
+// FIREBASE REALTIME CHAT
+// ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSy...",                    // ← GANTI DENGAN PUNYAMU
+  authDomain: "astacloud-xxx.firebaseapp.com",
+  databaseURL: "https://astacloud-xxx-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "astacloud-xxx",
+  storageBucket: "astacloud-xxx.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123"
+};
+
+let db = null;
+try {
+  if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+  }
+} catch (e) { console.warn('Firebase init error:', e); }
+
+const ROOM = 'public';
+let userName = localStorage.getItem('astacloud_chat_user') || '';
+let userKey = localStorage.getItem('astacloud_chat_key') || 'u_' + Math.random().toString(36).slice(2, 10);
+localStorage.setItem('astacloud_chat_key', userKey);
+
 let replyTo = null;
-let pollTimer = null;
-let heartbeatTimer = null;
-let lastSeenId = 0;
-let renderedIds = new Set();
+let chatListeners = [];
+let presenceListener = null;
+let typingListener = null;
+let typingTimeout = null;
 let isChatOpen = false;
 
 const chatOverlay = document.getElementById('chat-overlay');
@@ -482,82 +1126,97 @@ function getAvatarColor(name){let h=0;for(let i=0;i<name.length;i++)h=name.charC
 function getInitials(name){return name.trim().split(/\s+/).map(w=>w[0]).join('').substring(0,2).toUpperCase()||'?';}
 function getCurrentTime(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
 
-// ===== HEARTBEAT =====
-async function sendHeartbeat(action = 'ping') {
-  if (!userName) return;
-  try {
-    await fetch('/online', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user: userName, action })
-    });
-  } catch (e) {}
-}
+// ===== PRESENCE =====
+function setupPresence() {
+  if (!userName || !db) return;
+  const userRef = db.ref(`presence/${userKey}`);
+  const connectedRef = db.ref('.info/connected');
 
-// ===== LOAD MESSAGES (delta) =====
-async function loadMessages(isFirst = false) {
-  try {
-    const url = isFirst ? '/chat' : `/chat?since=${lastSeenId}`;
-    const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
-    const d = await r.json();
-    if (!d.ok) return;
+  connectedRef.on('value', (snap) => {
+    if (snap.val() === true) {
+      userRef.onDisconnect().remove();
+      userRef.set({
+        name: userName,
+        ts: firebase.database.ServerValue.TIMESTAMP
+      });
+    }
+  });
 
-    // Update online count
-    const onlineCount = d.onlineCount || 0;
-    const onlineUsers = d.online || [];
+  if (presenceListener) presenceListener.off();
+  presenceListener = db.ref('presence');
+  presenceListener.on('value', (snap) => {
+    const users = snap.val() || {};
+    const list = Object.values(users).map(u => u.name).filter(Boolean);
+    const unique = [...new Set(list)];
     const countEl = document.getElementById('online-count');
-    if (countEl) {
-      countEl.textContent = `${onlineCount} online`;
-    }
-
-    // Kalau first load, clear dulu
-    if (isFirst) {
-      chatMessages.innerHTML = '';
-      renderedIds.clear();
-      addSystemMessage('Hari ini');
-      lastSeenId = 0;
-    }
-
-    // Render pesan baru
-    const msgs = d.messages || [];
-    let added = 0;
-    for (const m of msgs) {
-      const id = m.id || m.ts || Date.now();
-      if (renderedIds.has(id)) continue;
-      renderedIds.add(id);
-      if (id > lastSeenId) lastSeenId = id;
-      const isSelf = m.user === userName;
-      addMessage(m.text, isSelf ? 'self' : 'other', m.user, m.time, m.reply, true);
-      added++;
-    }
-
-    // Kalau bukan pesan sendiri, tampilkan notif
-    if (added > 0 && !isFirst && isChatOpen) {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-  } catch (e) {}
+    if (countEl) countEl.textContent = `${unique.length} online`;
+  });
 }
 
-// ===== START / STOP POLLING =====
-function startChat() {
-  if (!pollTimer) {
-    loadMessages(true);
-    pollTimer = setInterval(() => loadMessages(false), 2500);
-  }
-  if (!heartbeatTimer) {
-    sendHeartbeat('ping');
-    heartbeatTimer = setInterval(() => sendHeartbeat('ping'), 20000);
-  }
+// ===== LOAD MESSAGES =====
+function loadMessagesRealtime() {
+  if (!db) return;
+  chatListeners.forEach(ref => ref.off());
+  chatListeners = [];
+
+  chatMessages.innerHTML = '';
+  addSystemMessage(t('chat.today'));
+
+  const msgRef = db.ref(`chats/${ROOM}`).orderByChild('ts').limitToLast(100);
+  const rendered = new Set();
+
+  msgRef.on('child_added', (snap) => {
+    const m = snap.val();
+    if (!m) return;
+    const key = snap.key;
+    if (rendered.has(key)) return;
+    rendered.add(key);
+
+    const isSelf = m.user === userName;
+    addMessage(m.text, isSelf ? 'self' : 'other', m.user, m.time, m.reply);
+
+    if (isChatOpen) {
+      setTimeout(() => { chatMessages.scrollTop = chatMessages.scrollHeight; }, 50);
+    }
+  });
+
+  chatListeners.push(msgRef);
 }
 
-function stopChat() {
-  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
-  if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
-  // Kirim leave
-  if (userName) sendHeartbeat('leave');
+// ===== TYPING =====
+function setupTyping() {
+  if (!db) return;
+  if (typingListener) typingListener.off();
+  typingListener = db.ref(`typing/${ROOM}`);
+  typingListener.on('value', (snap) => {
+    const data = snap.val() || {};
+    const now = Date.now();
+    const typingUsers = Object.entries(data)
+      .filter(([k, v]) => k !== userKey && v.name && (now - v.ts) < 4000)
+      .map(([k, v]) => v.name);
+
+    const el = document.getElementById('typing-indicator');
+    if (!el) return;
+    if (typingUsers.length === 0) {
+      el.classList.add('hidden');
+    } else {
+      el.classList.remove('hidden');
+      el.textContent = typingUsers.length === 1
+        ? `${typingUsers[0]} ${t('toast.typing')}...`
+        : `${typingUsers.length} ${t('toast.typingPlural')}...`;
+    }
+  });
 }
 
-// ===== UI CHAT =====
+function broadcastTyping() {
+  if (!userName || !db) return;
+  const typingRef = db.ref(`typing/${ROOM}/${userKey}`);
+  typingRef.set({ name: userName, ts: Date.now() });
+  if (typingTimeout) clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => { typingRef.remove(); }, 2500);
+}
+
+// ===== UI =====
 function openChat() {
   if (!userName) {
     nameModal.classList.add('show');
@@ -568,7 +1227,9 @@ function openChat() {
   chatOverlay.classList.add('flex');
   document.body.style.overflow = 'hidden';
   isChatOpen = true;
-  startChat();
+  setupPresence();
+  loadMessagesRealtime();
+  setupTyping();
   setTimeout(() => chatInput.focus(), 200);
 }
 
@@ -578,14 +1239,16 @@ function saveUserName() {
   const name = userNameInput.value.trim();
   if (!name) { userNameInput.focus(); return; }
   userName = name.substring(0, 20);
-  localStorage.setItem('chatUserName', userName);
+  localStorage.setItem('astacloud_chat_user', userName);
   nameModal.classList.remove('show');
   setTimeout(() => {
     chatOverlay.classList.remove('hidden');
     chatOverlay.classList.add('flex');
     document.body.style.overflow = 'hidden';
     isChatOpen = true;
-    startChat();
+    setupPresence();
+    loadMessagesRealtime();
+    setupTyping();
     setTimeout(() => chatInput.focus(), 200);
   }, 200);
 }
@@ -595,51 +1258,37 @@ function closeChat() {
   chatOverlay.classList.remove('flex');
   document.body.style.overflow = '';
   isChatOpen = false;
-  stopChat();
   cancelReply();
+  if (userName && db) db.ref(`typing/${ROOM}/${userKey}`).remove();
 }
 
 function sendChatMessage() {
   const msg = chatInput.value.trim();
   if (!msg) return;
   if (!userName) { nameModal.classList.add('show'); return; }
+  if (!db) { toast('Chat belum siap','err'); return; }
 
-  // Optimistic — tampil langsung
   const time = getCurrentTime();
-  addMessage(msg, 'self', userName, time, replyTo, false);
-  chatInput.value = '';
-  const sentReply = replyTo;
-  cancelReply();
+  const msgRef = db.ref(`chats/${ROOM}`).push();
+  msgRef.set({
+    user: userName,
+    userKey,
+    text: msg.substring(0, 500),
+    time,
+    ts: firebase.database.ServerValue.TIMESTAMP,
+    reply: replyTo ? { name: replyTo.name, text: replyTo.text.substring(0, 100) } : null
+  });
 
-  // Kirim ke server
-  fetch('/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify({
-      user: userName,
-      text: msg,
-      time,
-      reply: sentReply ? { name: sentReply.name, text: sentReply.text } : null
-    })
-  })
-  .then(r => r.json())
-  .then(d => {
-    if (d.ok && d.msg && d.msg.id) {
-      // Register ID biar gak double
-      renderedIds.add(d.msg.id);
-      if (d.msg.id > lastSeenId) lastSeenId = d.msg.id;
-    }
-    // Refresh cepat
-    setTimeout(() => loadMessages(false), 300);
-  })
-  .catch(() => toast('❌ Gagal kirim pesan', 'err'));
+  chatInput.value = '';
+  cancelReply();
+  if (typingTimeout) clearTimeout(typingTimeout);
+  db.ref(`typing/${ROOM}/${userKey}`).remove();
 }
 
 function cancelReply() {
   replyTo = null;
   document.getElementById('reply-preview').classList.remove('show');
 }
-
 function setReply(name, text) {
   replyTo = { name, text };
   document.getElementById('reply-preview-name').textContent = name;
@@ -648,7 +1297,7 @@ function setReply(name, text) {
   chatInput.focus();
 }
 
-function addMessage(text, type, sender, time, reply, fromServer = false) {
+function addMessage(text, type, sender, time, reply) {
   const isSelf = type === 'self';
   const wrapper = document.createElement('div');
   wrapper.className = `flex ${isSelf ? 'justify-end' : 'justify-start'} px-2 wa-msg-enter items-end my-1`;
@@ -667,7 +1316,7 @@ function addMessage(text, type, sender, time, reply, fromServer = false) {
   if (reply && reply.name) {
     const r = document.createElement('div');
     r.className = 'wa-reply';
-    r.innerHTML = `<div class="wa-reply-name">${escapeHtml(reply.name)}</div><div class="wa-reply-text">${escapeHtml(reply.text)}</div>`;
+    r.innerHTML = `<div class="wa-reply-name">${escapeHtmlChat(reply.name)}</div><div class="wa-reply-text">${escapeHtmlChat(reply.text)}</div>`;
     bubble.appendChild(r);
   }
 
@@ -697,38 +1346,83 @@ function addMessage(text, type, sender, time, reply, fromServer = false) {
     metaEl.appendChild(c);
   }
   bubble.appendChild(metaEl);
-
   bubble.onclick = () => setReply(sender || 'Anonim', text);
   wrapper.appendChild(bubble);
   chatMessages.appendChild(wrapper);
-
-  if (!fromServer || isSelf) {
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
 }
 
 function addSystemMessage(text) {
   const d = document.createElement('div');
   d.className = 'flex justify-center my-2 wa-msg-enter';
-  d.innerHTML = `<div class="chat-date">${escapeHtml(text)}</div>`;
+  d.innerHTML = `<div class="chat-date">${escapeHtmlChat(text)}</div>`;
   chatMessages.appendChild(d);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendChatMessage(); } });
-userNameInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveUserName(); } });
+chatInput.addEventListener('input', () => {
+  if (chatInput.value.trim().length > 0) broadcastTyping();
+});
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); sendChatMessage(); }
+});
+userNameInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); saveUserName(); }
+});
 
-// Kirim leave kalau user tutup tab
 window.addEventListener('beforeunload', () => {
-  if (userName) {
-    navigator.sendBeacon('/online', JSON.stringify({ user: userName, action: 'leave' }));
+  if (userName && db) {
+    db.ref(`presence/${userKey}`).remove();
+    db.ref(`typing/${ROOM}/${userKey}`).remove();
   }
 });
 
-// ===== INIT =====
+// ============================================================
+// SUPPORT MODAL
+// ============================================================
+function openSupportModal() {
+  const modal = document.getElementById('support-modal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+function closeSupportModal() {
+  const modal = document.getElementById('support-modal');
+  if (!modal) return;
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+  const checkbox = document.getElementById('hideSupportCheck');
+  if (checkbox && checkbox.checked) {
+    localStorage.setItem('astacloud_support_hide_until', Date.now() + (24*60*60*1000));
+  } else {
+    localStorage.removeItem('astacloud_support_hide_until');
+  }
+}
+function checkShowSupportModal() {
+  const until = localStorage.getItem('astacloud_support_hide_until');
+  if (until && Date.now() < parseInt(until)) return;
+  setTimeout(() => { openSupportModal(); }, 1200);
+}
+
+// Close modal on outside click
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('support-modal');
+  if (modal && e.target === modal) closeSupportModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeSupportModal();
+    closeLangMenu();
+  }
+});
+
+// ============================================================
+// INIT
+// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
+  applyTranslations();
+  updateGridUI();
   loadDailyStatus();
   setInterval(loadDailyStatus, 60000);
+  checkShowSupportModal();
 });
 </script>
 </body>
