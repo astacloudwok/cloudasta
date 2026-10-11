@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Astacloud</title>
+
+<meta property="og:title" content="Astacloud — AM Premium Generator">
+<meta property="og:description" content="Generator premium otomatis untuk Alight Motion — verifikasi via email dengan mudah dan cepat.">
+<meta property="og:image" content="assets/preview.jpg">
+<meta property="og:url" content="https://astacloud.my.id">
+<meta property="og:type" content="website">
+
+<link rel="icon" href="assets/favicon.jpg" type="image/jpeg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg-dark:#070b14;--bg-card:#0f172a;--accent:#2563eb;--accent-glow:rgba(37,99,235,.4);--text-main:#f8fafc;--text-muted:#8b9bb4;--border-color:rgba(255,255,255,.08);}
+*{font-family:'Plus Jakarta Sans',sans-serif;box-sizing:border-box;}
+body{background-color:var(--bg-dark);color:var(--text-main);margin:0;padding:0;overflow-x:hidden;transition:background .3s ease;scroll-behavior:smooth;}
+body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.06) 1px,transparent 1px);background-size:60px 60px;background-attachment:fixed;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg-dark);}
+::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:var(--accent);}
+.fade-in{animation:fadeIn .5s ease forwards;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
+.glass-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;padding:24px;transition:all .3s ease;}
+.glass-card:hover{border-color:rgba(255,255,255,.15);}
+.input-field{background:#0a0f1c;border:1px solid var(--border-color);border-radius:12px;padding:16px;color:#fff;width:100%;outline:none;transition:border-color .2s;}
+.input-field:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+.btn-primary{background:var(--accent);color:#fff;border-radius:12px;padding:16px;font-weight:700;width:100%;border:none;cursor:pointer;transition:all .2s;}
+.btn-primary:hover:not(:disabled){background:#1d4ed8;transform:translateY(-1px);}
+.btn-primary:active{transform:scale(.98);}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;}
+.nav-item{color:var(--text-muted);transition:color .2s;cursor:pointer;}
+.nav-item.active{color:var(--accent);}
+.nav-item.active .nav-indicator{display:block;}
+.nav-indicator{display:none;width:4px;height:4px;background:var(--accent);border-radius:50%;margin:0 auto 4px;}
+.toast{position:fixed;top:20px;right:20px;z-index:999;padding:12px 18px;border-radius:12px;font-size:13px;background:#1e293b;border:1px solid var(--border-color);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.5);animation:slideIn .3s ease;max-width:90vw;}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+.faq-content{max-height:0;overflow:hidden;transition:max-height .3s ease-out;}
+.faq-item.active .faq-content{max-height:300px;}
+.faq-item.active .faq-chevron{transform:rotate(180deg);}
+.faq-chevron{transition:transform .3s ease;}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+/* Chat */
+#chat-messages{background-color:#0b141a;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cg fill='%23182229' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3Ccircle cx='100' cy='80' r='1.2'/%3E%3Ccircle cx='200' cy='50' r='1.5'/%3E%3Ccircle cx='70' cy='170' r='1.2'/%3E%3Ccircle cx='180' cy='200' r='1.5'/%3E%3Ccircle cx='230' cy='130' r='1.2'/%3E%3Ccircle cx='130' cy='240' r='1.2'/%3E%3C/g%3E%3C/svg%3E");}
+.wa-bubble{max-width:85%;padding:6px 10px 20px 10px;border-radius:8px;font-size:14px;line-height:1.4;word-wrap:break-word;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s;}
+.wa-bubble:active{transform:scale(.98);}
+.wa-bubble-self{background:#005c4b;color:#e9edef;border-top-right-radius:2px;}
+.wa-bubble-other{background:#202c33;color:#e9edef;border-top-left-radius:2px;}
+.wa-meta{position:absolute;bottom:3px;right:8px;display:flex;align-items:center;gap:3px;font-size:10px;color:rgba(233,237,239,.6);}
+.wa-name{font-size:11.5px;font-weight:700;margin-bottom:2px;color:#53bdeb;}
+.wa-reply{border-left:3px solid #53bdeb;padding:4px 8px;margin-bottom:4px;background:rgba(0,0,0,.25);border-radius:4px;font-size:12px;}
+.wa-reply-name{color:#53bdeb;font-weight:700;font-size:11px;}
+.wa-reply-text{color:rgba(233,237,239,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
+.wa-msg-enter{animation:waMsgIn .25s ease-out forwards;}
+@keyframes waMsgIn{from{opacity:0;transform:translateY(6px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+.chat-date{text-align:center;font-size:11px;color:#8696a0;background:#182229;padding:4px 12px;border-radius:8px;margin:0 auto;width:fit-content;box-shadow:0 1px 1px rgba(0,0,0,.2);}
+#name-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;}
+#name-modal.show{display:flex;}
+.online-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.7);}50%{opacity:.8;box-shadow:0 0 0 4px rgba(34,197,94,0);}}
+.reply-preview{padding:8px 12px;background:#202c33;border-left:4px solid #53bdeb;margin:0 8px 4px 8px;border-radius:6px;display:none;align-items:center;gap:8px;}
+.reply-preview.show{display:flex;}
+.msg-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;align-self:flex-end;margin:0 6px;}
+</style>
+</head>
+<body class="grid-active pb-24">
+
+<header class="fixed top-0 w-full z-40 bg-[#070b14]/90 backdrop-blur-lg border-b border-white/5 px-4 py-3">
+  <div class="max-w-md mx-auto flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <img src="assets/asta.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10">
+      <span class="font-extrabold text-lg tracking-tight">Astacloud</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="toggleGrid()" id="grid-toggle-btn" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="fas fa-border-all text-xs"></i></button>
+      <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="fas fa-sun text-xs"></i></button>
+      <div class="flex items-center gap-1 text-xs text-gray-400 bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5"><i class="fas fa-globe text-blue-400"></i> ID <i class="fas fa-chevron-down text-[8px]"></i></div>
+    </div>
+  </div>
+</header>
+
+<main class="pt-24 px-4 max-w-md mx-auto space-y-16">
+
+  <section id="hero" class="text-center fade-in">
+    <div class="inline-block px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-[10px] font-bold tracking-widest mb-5">ASTACLOUD • PREMIUM GENERATOR</div>
+    <h1 class="text-3xl font-extrabold leading-tight mb-4 tracking-tight">Alight Motion<br>Premium</h1>
+    <p class="text-sm text-[#8b9bb4] mb-8 px-4 leading-relaxed">Generator premium otomatis — verifikasi via email ✨</p>
+    <div class="space-y-4">
+      <button onclick="scrollToSection('premium-form')" class="btn-primary flex items-center justify-center gap-2 text-sm"><i class="fas fa-crown"></i> Dapatkan Premium</button>
+      <button onclick="scrollToSection('cara-menggunakan')" class="w-full py-4 rounded-xl bg-white/5 border border-white/10 text-sm font-bold text-white hover:bg-white/10 transition-colors">Lihat Cara Kerja</button>
+    </div>
+  </section>
+
+  <section id="premium-form" class="fade-in">
+    <div class="glass-card">
+      <div class="flex items-center gap-4 mb-6">
+        <img src="assets/motion.jpg" alt="Alight Motion" class="w-14 h-14 rounded-2xl object-cover shadow-lg shadow-blue-500/30 border border-white/10">
+        <div>
+          <h2 class="font-bold text-base">AM Premium Generator</h2>
+          <p class="text-[11px] text-[#8b9bb4]">Verifikasi via email</p>
+        </div>
+      </div>
+
+      <div class="flex gap-2 mb-6 p-1.5 rounded-xl bg-black/30">
+        <button id="tab-send" onclick="switchGenTab('send')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white">Send</button>
+        <button id="tab-verify" onclick="switchGenTab('verify')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all text-gray-400 cursor-not-allowed opacity-50" disabled>Verif</button>
+      </div>
+
+      <div id="panel-send" class="space-y-4">
+        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider">EMAIL</label>
+        <input id="sendEmail" type="email" placeholder="kamu@gmail.com" class="input-field text-sm">
+        <div class="flex gap-2 mt-2">
+          <button id="btnSend" onclick="submitEmail()" class="btn-primary text-sm flex items-center justify-center gap-2 flex-1"><i class="fas fa-paper-plane"></i> Send</button>
+          <button onclick="copySendLink()" title="Salin URL API" class="w-14 bg-white/5 border border-white/10 rounded-xl text-white hover:bg-white/10 transition-colors flex items-center justify-center shrink-0"><i class="fas fa-copy"></i></button>
+        </div>
+      </div>
+
+      <div id="panel-verify" class="space-y-4 hidden">
+        <div id="verify-input-group" class="space-y-4">
+          <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider">LINK VERIFIKASI</label>
+          <div class="relative">
+            <input id="verifyLink" type="text" placeholder="Tempel link verifikasi dari email..." class="input-field text-sm pr-14">
+            <button onclick="pasteVerifyLink()" title="Tempel dari clipboard" class="absolute right-2 top-2 w-10 h-10 bg-[#1e2333] hover:bg-[#252b3d] border border-white/10 rounded-lg text-white flex items-center justify-center transition-colors"><i class="fas fa-paste text-sm"></i></button>
+          </div>
+          <button id="btnVerify" onclick="submitUrl()" class="btn-primary text-sm flex items-center justify-center gap-2 mt-2"><i class="fas fa-check-circle"></i> Verif</button>
+        </div>
+        <div id="verifyResult"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kenapa-astacloud" class="fade-in">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-extrabold mb-3">Kenapa Astacloud</h2>
+      <p class="text-xs text-[#8b9bb4] px-6 leading-relaxed">Sederhana, rapi, dan langsung ke inti: dapatkan premium dengan mudah.</p>
+    </div>
+    <div class="space-y-4">
+      <div class="glass-card flex items-start gap-5">
+        <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-xl shrink-0 border border-blue-500/20"><i class="fas fa-bolt"></i></div>
+        <div class="pt-1"><h3 class="font-bold text-sm mb-1.5">Proses Cepat</h3><p class="text-[11px] text-[#8b9bb4] leading-relaxed">Hanya butuh beberapa menit untuk mendapatkan akses premium.</p></div>
+      </div>
+      <div class="glass-card flex items-start gap-5">
+        <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-xl shrink-0 border border-blue-500/20"><i class="fas fa-shield-alt"></i></div>
+        <div class="pt-1"><h3 class="font-bold text-sm mb-1.5">Aman & Terpercaya</h3><p class="text-[11px] text-[#8b9bb4] leading-relaxed">Data email Anda aman dan tidak disalahgunakan.</p></div>
+      </div>
+      <div class="glass-card flex items-start gap-5">
+        <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-xl shrink-0 border border-blue-500/20"><i class="fas fa-check-circle"></i></div>
+        <div class="pt-1"><h3 class="font-bold text-sm mb-1.5">Gratis & Mudah</h3><p class="text-[11px] text-[#8b9bb4] leading-relaxed">Tidak perlu bayar, cukup ikuti langkah verifikasi email.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cara-menggunakan" class="fade-in">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl font-extrabold mb-3">Cara Menggunakan</h2>
+      <p class="text-xs text-[#8b9bb4]">Tiga langkah singkat sampai premium aktif.</p>
+    </div>
+    <div class="space-y-10 text-center">
+      <div class="flex flex-col items-center">
+        <div class="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 text-2xl mb-4 shadow-lg shadow-blue-500/10"><i class="fas fa-envelope"></i></div>
+        <h3 class="font-bold text-sm mb-2">1. Masukkan Email</h3>
+        <p class="text-[11px] text-[#8b9bb4] px-4">Masukkan email aktif yang ingin didaftarkan premium.</p>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 text-2xl mb-4 shadow-lg shadow-blue-500/10"><i class="fas fa-search"></i></div>
+        <h3 class="font-bold text-sm mb-2">2. Cek Inbox/Spam</h3>
+        <p class="text-[11px] text-[#8b9bb4] px-4">Cari email dari Alight Creative lalu salin link verifikasi.</p>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 text-2xl mb-4 shadow-lg shadow-blue-500/10"><i class="fas fa-check-circle"></i></div>
+        <h3 class="font-bold text-sm mb-2">3. Verifikasi</h3>
+        <p class="text-[11px] text-[#8b9bb4] px-4">Tempel link verifikasi dan premium akan otomatis aktif.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tentang" class="fade-in">
+    <div class="glass-card">
+      <h2 class="text-xl font-extrabold mb-4">Tentang Astacloud</h2>
+      <p class="text-xs text-[#8b9bb4] leading-relaxed mb-8">Astacloud adalah website Alight Motion Premium Generator, alat untuk mendapatkan akses premium secara otomatis melalui verifikasi email. Astacloud dikembangkan oleh Imxxzz (imran).</p>
+      <div class="space-y-3">
+        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5"><span class="text-[10px] font-bold text-gray-500 tracking-wider">WEBSITE</span><span class="text-xs font-bold">Astacloud</span></div>
+        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5"><span class="text-[10px] font-bold text-gray-500 tracking-wider">PRODUK</span><span class="text-xs font-bold">Alight Motion Premium</span></div>
+        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5"><span class="text-[10px] font-bold text-gray-500 tracking-wider">DEVELOPER</span><span class="text-xs font-bold">Imxxzz (imran)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="fade-in">
+    <h2 class="text-2xl font-extrabold text-center mb-8">Pertanyaan yang Sering Diajukan</h2>
+    <div class="space-y-3">
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Apa itu Astacloud?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Astacloud adalah platform yang menyediakan generator Alight Motion Premium secara otomatis dan gratis.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Apakah ini berbayar?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Tidak, layanan ini 100% gratis. Kami hanya meminta Anda memverifikasi email.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Kenapa link verifikasi tidak masuk?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Coba cek folder Spam atau Promosi di Gmail Anda. Tunggu beberapa menit jika belum masuk.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Apakah akun saya aman?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Ya, kami hanya menggunakan email Anda untuk proses verifikasi resmi dari Alight Motion.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm">Apa arti label Terverifikasi?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed">Label terverifikasi menandakan bahwa akun Anda telah berhasil diupgrade ke versi premium.</div></div>
+    </div>
+  </section>
+
+  <footer id="footer" class="fade-in pt-8 border-t border-white/5 text-center">
+    <div class="flex items-center justify-center gap-2 mb-4">
+      <img src="assets/asta.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10">
+      <span class="font-extrabold text-lg tracking-tight">Astacloud</span>
+    </div>
+    <p class="text-[11px] text-[#8b9bb4] mb-1">Alight Motion Premium oleh imxxzz</p>
+    <p class="text-[10px] text-gray-600 mb-8">© 2026 Astacloud • All Rights Reserved.</p>
+    <div class="flex justify-center gap-6 text-xs text-[#8b9bb4] mb-8">
+      <a href="#" class="hover:text-blue-500 transition-colors">Privacy Policy</a>
+      <a href="#" class="hover:text-blue-500 transition-colors">Terms of Service</a>
+      <a href="javascript:void(0)" onclick="openChat()" class="hover:text-blue-500 transition-colors">Contact</a>
+    </div>
+    <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-[11px] text-[#8b9bb4] mb-10">
+      <a href="https://tiktok.com/@imxxxzzz" target="_blank" class="flex items-center gap-2 hover:text-white transition-colors"><i class="fab fa-tiktok"></i> TikTok</a>
+      <a href="https://tiktok.com/@.wmajnremkdfjfrjeklofjfn" target="_blank" class="flex items-center gap-2 hover:text-white transition-colors"><i class="fab fa-tiktok"></i> TikTok 2</a>
+      <a href="https://whatsapp.com/channel/0029VbCdCFkI1rceYd2vik31" target="_blank" class="flex items-center gap-2 hover:text-white transition-colors"><i class="fab fa-whatsapp text-green-500"></i> Saluran WhatsApp</a>
+      <a href="javascript:void(0)" onclick="openChat()" class="flex items-center gap-2 hover:text-white transition-colors"><i class="fas fa-comment-dots"></i> Public Chat</a>
+    </div>
+  </footer>
+
+</main>
+
+<nav class="fixed bottom-0 w-full z-50 bg-[#0a0f1c]/95 backdrop-blur-lg border-t border-white/10 px-2 py-3">
+  <div class="max-w-md mx-auto flex justify-between items-center">
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5 active" onclick="scrollToSection('hero')" id="nav-beranda"><div class="nav-indicator"></div><i class="fas fa-home text-lg"></i><span class="text-[10px] font-medium">Beranda</span></div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('premium-form')" id="nav-premium"><div class="nav-indicator"></div><i class="fas fa-crown text-lg"></i><span class="text-[10px] font-medium">Premium</span></div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('cara-menggunakan')" id="nav-panduan"><div class="nav-indicator"></div><i class="fas fa-list-check text-lg"></i><span class="text-[10px] font-medium">Panduan</span></div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('faq')" id="nav-faq"><div class="nav-indicator"></div><i class="fas fa-question-circle text-lg"></i><span class="text-[10px] font-medium">FAQ</span></div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="openDonationModal()" id="nav-donasi"><div class="nav-indicator"></div><i class="fas fa-hand-holding-heart text-lg"></i><span class="text-[10px] font-medium">Donasi</span></div>
+  </div>
+</nav>
+
+<button onclick="openChat()" class="fixed bottom-24 right-4 w-12 h-12 bg-blue-600 rounded-full shadow-lg shadow-blue-500/30 flex items-center justify-center text-white z-40 hover:scale-105 active:scale-95 transition-all" title="Buka Chat Publik"><i class="fas fa-comment-dots text-lg"></i></button>
+
+<div id="name-modal">
+  <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in">
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4 border border-blue-500/30"><i class="fas fa-user text-blue-400 text-2xl"></i></div>
+      <h3 class="font-extrabold text-lg mb-2">Selamat Datang di Public Chat</h3>
+      <p class="text-xs text-[#8b9bb4]">Masukkan nama kamu dulu untuk ikut ngobrol ya!</p>
+    </div>
+    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">NAMA KAMU</label>
+    <input id="userNameInput" type="text" placeholder="Contoh: asta" maxlength="20" class="input-field text-sm mb-4" onkeydown="if(event.key==='Enter') saveUserName()">
+    <button onclick="saveUserName()" class="btn-primary text-sm flex items-center justify-center gap-2"><i class="fas fa-paper-plane"></i> Mulai Chatting</button>
+    <button onclick="closeNameModal()" class="w-full py-3 mt-3 rounded-xl bg-white/5 border border-white/10 text-gray-400 font-bold text-xs hover:bg-white/10 transition-colors">Batal</button>
+  </div>
+</div>
+
+<div id="support-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] hidden flex items-center justify-center p-4">
+  <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in">
+    <div class="flex justify-between items-start mb-5">
+      <div><h3 class="font-bold text-base">Support Developer</h3><p class="text-[11px] text-[#8b9bb4] mt-1.5 leading-relaxed">Support Astacloud dengan mengikuti sosial media dan saluran resmi developer.</p></div>
+      <button onclick="closeSupportModal()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="fas fa-times text-xs"></i></button>
+    </div>
+    <div class="space-y-3 mb-6">
+      <a href="https://tiktok.com/@imxxxzzz" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors"><i class="fa-brands fa-tiktok text-xl text-white w-6 text-center"></i><div class="flex-1"><h4 class="text-xs font-bold">TikTok</h4><p class="text-[10px] text-[#8b9bb4] mt-0.5">@imxxxzzz</p></div><i class="fas fa-external-link-alt text-[10px] text-gray-500"></i></a>
+      <a href="https://tiktok.com/@.wmajnremkdfjfrjeklofjfn" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors"><i class="fa-brands fa-tiktok text-xl text-white w-6 text-center"></i><div class="flex-1"><h4 class="text-xs font-bold">TikTok 2</h4><p class="text-[10px] text-[#8b9bb4] mt-0.5">@imxxxzzz2</p></div><i class="fas fa-external-link-alt text-[10px] text-gray-500"></i></a>
+      <a href="https://whatsapp.com/channel/0029VbCdCFkI1rceYd2vik31" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors"><i class="fab fa-whatsapp text-xl text-green-400 w-6 text-center"></i><div class="flex-1"><h4 class="text-xs font-bold">Saluran WhatsApp</h4><p class="text-[10px] text-[#8b9bb4] mt-0.5">Saluran Astacloud</p></div><i class="fas fa-external-link-alt text-[10px] text-gray-500"></i></a>
+    </div>
+    <button onclick="window.open('https://wa.me/62882019782087','_blank')" class="w-full py-3.5 rounded-xl bg-blue-600 text-white font-bold text-xs mb-4 flex items-center justify-center gap-2 hover:bg-blue-500 transition-colors"><i class="fas fa-comment-dots"></i> Contact Developer</button>
+    <label class="flex items-center gap-3 text-[11px] text-[#8b9bb4] mb-5 cursor-pointer"><input type="checkbox" id="hideSupportCheck" class="accent-blue-600 w-4 h-4 rounded border-gray-600"> Tampilkan lagi setelah 24 jam</label>
+    <button onclick="closeSupportModal()" class="w-full py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs hover:bg-white/10 transition-colors">Tutup</button>
+  </div>
+</div>
+
+<div id="donation-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] hidden flex items-center justify-center p-4">
+  <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in text-center">
+    <div class="flex justify-between items-start mb-4">
+      <div class="text-left"><h3 class="font-bold text-base">Donasi</h3><p class="text-[11px] text-[#8b9bb4] mt-1">Dukung pengembangan Astacloud</p></div>
+      <button onclick="closeDonationModal()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white transition-colors"><i class="fas fa-times text-xs"></i></button>
+    </div>
+    <p class="text-xs text-[#8b9bb4] mb-6">Donasi Anda sangat berarti untuk keberlangsungan dan pengembangan website ini.</p>
+    <div class="bg-[#0a0f1c] border border-white/10 rounded-2xl p-4 mb-6 flex flex-col items-center justify-center">
+      <div class="w-48 h-48 bg-gray-800 rounded-xl flex items-center justify-center mb-4 overflow-hidden relative">
+        <img src="assets/qris.jpg" alt="QRIS" class="w-full h-full object-contain p-2">
+      </div>
+      <p class="text-[10px] text-gray-500">Scan QRIS di atas untuk berdonasi</p>
+    </div>
+    <button onclick="closeDonationModal()" class="w-full py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs hover:bg-white/10 transition-colors">Tutup</button>
+  </div>
+</div>
+
+<!-- FULL SCREEN CHAT -->
+<div id="chat-overlay" class="fixed inset-0 bg-[#0b141a] z-[70] hidden flex-col w-full h-full overflow-hidden fade-in">
+  <div class="p-3 border-b border-white/10 flex items-center gap-3 bg-[#202c33] shrink-0">
+    <button onclick="closeChat()" class="text-gray-400 hover:text-white w-9 h-9 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors shrink-0"><i class="fas fa-arrow-left text-base"></i></button>
+    <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold relative shrink-0">
+      <i class="fas fa-users"></i>
+      <span class="absolute bottom-0 right-0 online-dot border-2 border-[#202c33]"></span>
+    </div>
+    <div class="flex-1 min-w-0">
+      <h3 class="text-white font-bold text-sm truncate">Public Chat Astacloud</h3>
+      <p class="text-[11px] text-green-400 flex items-center gap-1.5"><span class="online-dot"></span> <span id="online-count">Online</span></p>
+    </div>
+  </div>
+
+  <div id="chat-messages" class="flex-1 overflow-y-auto py-3 flex flex-col"></div>
+
+  <div id="reply-preview" class="reply-preview">
+    <i class="fas fa-reply text-[#53bdeb] text-xs"></i>
+    <div class="flex-1 overflow-hidden">
+      <div id="reply-preview-name" class="text-[11px] font-bold text-[#53bdeb]">Balas</div>
+      <div id="reply-preview-text" class="text-[11px] text-gray-300 truncate">-</div>
+    </div>
+    <button onclick="cancelReply()" class="w-6 h-6 rounded-full hover:bg-white/10 flex items-center justify-center text-gray-400"><i class="fas fa-times text-xs"></i></button>
+  </div>
+
+  <div class="p-2 border-t border-white/10 bg-[#202c33] flex gap-2 items-end shrink-0">
+    <div class="flex-1 bg-[#2a3942] rounded-3xl flex items-center px-4 py-2.5 min-h-[46px]">
+      <input type="text" id="chat-input" placeholder="Ketik pesan..." class="flex-1 bg-transparent border-none text-sm text-white focus:outline-none placeholder-gray-500" maxlength="500">
+    </div>
+    <button onclick="sendChatMessage()" class="w-11 h-11 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center transition-all active:scale-95 shrink-0"><i class="fas fa-paper-plane text-sm"></i></button>
+  </div>
+</div>
+
+<<script>
+// ============ UI HELPERS (sama seperti sebelumnya) ============
+let gridStatus = localStorage.getItem('grid') !== 'off';
+function updateGridUI(){const btn=document.getElementById('grid-toggle-btn');if(gridStatus){document.body.classList.add('grid-active');btn.classList.add('text-blue-400');}else{document.body.classList.remove('grid-active');btn.classList.remove('text-blue-400');}}
+function toggleGrid(){gridStatus=!gridStatus;localStorage.setItem('grid',gridStatus?'on':'off');updateGridUI();}
+updateGridUI();
+
+function scrollToSection(id){const s=document.getElementById(id);if(s){const off=80;const pos=s.getBoundingClientRect().top+window.pageYOffset-off;window.scrollTo({top:pos,behavior:'smooth'});}}
+window.addEventListener('scroll',()=>{const sections=['hero','premium-form','cara-menggunakan','faq'];const navIds=['beranda','premium','panduan','faq'];let cur='beranda';sections.forEach((id,i)=>{const s=document.getElementById(id);if(s&&window.pageYOffset>=s.offsetTop-120)cur=navIds[i];});navIds.forEach(id=>document.getElementById(`nav-${id}`).classList.remove('active'));document.getElementById('nav-donasi').classList.remove('active');document.getElementById(`nav-${cur}`).classList.add('active');});
+
+function toggleFaq(el){document.querySelectorAll('.faq-item').forEach(i=>{if(i!==el)i.classList.remove('active');});el.classList.toggle('active');}
+function openSupportModal(){document.getElementById('support-modal').classList.remove('hidden');document.getElementById('support-modal').classList.add('flex');}
+function closeSupportModal(){document.getElementById('support-modal').classList.add('hidden');document.getElementById('support-modal').classList.remove('flex');const hc=document.getElementById('hideSupportCheck');if(hc&&hc.checked){localStorage.setItem('hideSupportUntil',Date.now()+24*60*60*1000);}}
+function checkShowSupportModalOnLoad(){const hu=localStorage.getItem('hideSupportUntil');if(hu&&Date.now()<parseInt(hu))return;openSupportModal();}
+function openDonationModal(){document.getElementById('donation-modal').classList.remove('hidden');document.getElementById('donation-modal').classList.add('flex');}
+function closeDonationModal(){document.getElementById('donation-modal').classList.add('hidden');document.getElementById('donation-modal').classList.remove('flex');}
+function toast(msg,type='info'){const c={ok:'border-green-500/50 text-green-200 bg-green-900/40',err:'border-red-500/50 text-red-200 bg-red-900/40',info:'border-blue-500/50 text-blue-200 bg-blue-900/40'};const t=document.createElement('div');t.className=`toast ${c[type]}`;t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
+function loading(btn,text){btn.disabled=true;btn.dataset.orig=btn.innerHTML;btn.innerHTML=`<span class="spinner"></span> <span class="ml-2">${text}</span>`;}
+function reset(btn){btn.disabled=false;if(btn.dataset.orig)btn.innerHTML=btn.dataset.orig;}
+function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+
+// ============ GENERATOR ============
+let isVerifiedUnlocked=false;
+let lastEmail='';
+
+function switchGenTab(tab){
+  if(tab==='verify'&&!isVerifiedUnlocked){toast('Kirim email dulu sebelum ke step Verif','err');return;}
+  const tabSend=document.getElementById('tab-send');
+  const tabVerify=document.getElementById('tab-verify');
+  const panelSend=document.getElementById('panel-send');
+  const panelVerify=document.getElementById('panel-verify');
+  if(tab==='send'){
+    tabSend.className='flex-1 py-2.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white';
+    tabVerify.className='flex-1 py-2.5 rounded-lg text-xs font-bold transition-all text-gray-400';
+    panelSend.classList.remove('hidden');panelVerify.classList.add('hidden');
+  } else {
+    tabVerify.className='flex-1 py-2.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white';
+    tabSend.className='flex-1 py-2.5 rounded-lg text-xs font-bold transition-all text-gray-400';
+    panelVerify.classList.remove('hidden');panelSend.classList.add('hidden');
+  }
+}
+
+function copySendLink(){const email=document.getElementById('sendEmail').value.trim()||'email@example.com';copyToClipboard(`${location.origin}/api/send?email=${encodeURIComponent(email)}`);}
+function copyToClipboard(text){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>toast('URL disalin','ok')).catch(()=>fallbackCopy(text));}else fallbackCopy(text);}
+function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('URL disalin','ok');}catch(e){toast('Gagal menyalin','err');}document.body.removeChild(ta);}
+function pasteVerifyLink(){if(navigator.clipboard&&navigator.clipboard.readText){navigator.clipboard.readText().then(t=>{if(t){document.getElementById('verifyLink').value=t;toast('Link ditempel!','ok');}}).catch(()=>toast('Gagal tempel','err'));}else toast('Browser tidak mendukung','err');}
+
+async function submitEmail(){
+  const email=document.getElementById('sendEmail').value.trim();
+  const btn=document.getElementById('btnSend');
+  if(!email||!/@/.test(email)){toast('Masukkan email yang valid dulu ya','err');return;}
+  loading(btn,'Mengirim...');
+  try{
+    const r=await fetch('/api/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    const d=await r.json();
+    if(d.ok){
+      lastEmail=email;isVerifiedUnlocked=true;
+      const tabVerify=document.getElementById('tab-verify');
+      tabVerify.disabled=false;tabVerify.classList.remove('cursor-not-allowed','opacity-50');
+      document.getElementById('sendEmail').value='';
+      toast('✅ Link terkirim ke <b>'+email+'</b>','ok');
+      switchGenTab('verify');
+    } else { toast('❌ '+(d.why||'Gagal kirim'),'err'); }
+  }catch(e){toast('❌ Network error: '+e.message,'err');}
+  finally{reset(btn);}
+}
+
+async function submitUrl(){
+  const link=document.getElementById('verifyLink').value.trim();
+  const btn=document.getElementById('btnVerify');
+  const resEl=document.getElementById('verifyResult');
+  if(!link){toast('Paste link verifikasi dari email','err');return;}
+  if(!lastEmail){toast('Kirim email dulu ya','err');return;}
+  loading(btn,'Memproses...');
+  try{
+    const r=await fetch('/api/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:lastEmail,link})});
+    const d=await r.json();
+    if(d.ok){
+      document.getElementById('verify-input-group').classList.add('hidden');
+      resEl.innerHTML=`<div class="space-y-4 text-center py-2 fade-in"><div class="bg-green-500/10 border border-green-500/40 rounded-2xl p-5 text-green-200"><div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto text-green-400 text-lg mb-3"><i class="fas fa-check"></i></div><h3 class="font-extrabold text-sm mb-3">PREMIUM SUCCESS!</h3><div class="bg-black/30 rounded-xl p-4 text-center space-y-2 text-xs"><div class="text-gray-400">📧 ${escapeHtml(d.email)}</div><div class="font-mono text-blue-400 font-extrabold text-lg">${escapeHtml(d.order)}</div><div class="text-green-400 font-bold text-xs">${escapeHtml(d.status)}</div></div><p class="text-[11px] text-gray-300 mt-3 leading-relaxed">Login di app Alight Motion pakai email di atas ya~</p></div><button onclick="resetGenerator()" class="btn-primary text-sm flex items-center justify-center gap-2"><i class="fas fa-redo"></i> Ulang</button></div>`;
+      toast('🎉 Premium berhasil diaktifkan!','ok');
+    } else { toast('❌ '+(d.why||'Gagal verifikasi'),'err'); }
+  }catch(e){toast('❌ Network error: '+e.message,'err');}
+  finally{reset(btn);}
+}
+
+function resetGenerator(){
+  document.getElementById('verify-input-group').classList.remove('hidden');
+  document.getElementById('verifyResult').innerHTML='';
+  document.getElementById('verifyLink').value='';
+  lastEmail='';isVerifiedUnlocked=false;
+  const tabVerify=document.getElementById('tab-verify');
+  tabVerify.disabled=true;tabVerify.classList.add('cursor-not-allowed','opacity-50');
+  switchGenTab('send');
+}
+
+// ============ PUBLIC CHAT (polling) ============
+let userName=localStorage.getItem('chatUserName')||'';
+let replyTo=null;
+let pollTimer=null;
+let lastSeenTs=0;
+let renderedKeys=new Set();
+
+const chatOverlay=document.getElementById('chat-overlay');
+const chatMessages=document.getElementById('chat-messages');
+const chatInput=document.getElementById('chat-input');
+const nameModal=document.getElementById('name-modal');
+const userNameInput=document.getElementById('userNameInput');
+
+const AVATAR_COLORS=['#0ea5e9','#8b5cf6','#ec4899','#f59e0b','#10b981','#ef4444','#6366f1','#14b8a6'];
+function getAvatarColor(name){let h=0;for(let i=0;i<name.length;i++)h=name.charCodeAt(i)+((h<<5)-h);return AVATAR_COLORS[Math.abs(h)%AVATAR_COLORS.length];}
+function getInitials(name){return name.trim().split(/\s+/).map(w=>w[0]).join('').substring(0,2).toUpperCase()||'?';}
+function getCurrentTime(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
+
+function openChat(){
+  if(!userName){nameModal.classList.add('show');userNameInput.focus();return;}
+  chatOverlay.classList.remove('hidden');
+  chatOverlay.classList.add('flex');
+  document.body.style.overflow='hidden';
+  startPolling();
+  setTimeout(()=>chatInput.focus(),200);
+}
+function closeNameModal(){nameModal.classList.remove('show');}
+function saveUserName(){
+  const name=userNameInput.value.trim();
+  if(!name){userNameInput.focus();return;}
+  userName=name.substring(0,20);
+  localStorage.setItem('chatUserName',userName);
+  nameModal.classList.remove('show');
+  setTimeout(()=>{
+    chatOverlay.classList.remove('hidden');
+    chatOverlay.classList.add('flex');
+    document.body.style.overflow='hidden';
+    startPolling();
+    setTimeout(()=>chatInput.focus(),200);
+  },200);
+}
+function closeChat(){
+  chatOverlay.classList.add('hidden');
+  chatOverlay.classList.remove('flex');
+  document.body.style.overflow='';
+  cancelReply();
+  stopPolling();
+}
+
+function startPolling(){
+  if(pollTimer) return;
+  loadMessages(true);
+  pollTimer = setInterval(()=>loadMessages(false), 2500);
+}
+function stopPolling(){
+  if(pollTimer){ clearInterval(pollTimer); pollTimer=null; }
+}
+
+async function loadMessages(isFirst){
+  try {
+    const r = await fetch('/api/chat');
+    const d = await r.json();
+    if(!d.ok || !Array.isArray(d.messages)) return;
+
+    if(isFirst){
+      chatMessages.innerHTML='';
+      renderedKeys.clear();
+      lastSeenTs=0;
+      addSystemMessage('Hari ini');
+    }
+
+    let newCount=0;
+    for(const m of d.messages){
+      const key = `${m.ts||0}::${m.user}::${m.text}`;
+      if(renderedKeys.has(key)) continue;
+      renderedKeys.add(key);
+      const isSelf = m.user === userName;
+      addMessage(m.text, isSelf?'self':'other', m.user, m.time, m.reply);
+      newCount++;
+      if(m.ts > lastSeenTs) lastSeenTs = m.ts;
+    }
+    if(newCount && chatOverlay.classList.contains('flex')){
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  } catch(e) { /* silent */ }
+}
+
+async function sendChatMessage(){
+  const msg=chatInput.value.trim();
+  if(!msg)return;
+  if(!userName){nameModal.classList.add('show');return;}
+
+  // optimistic render
+  const time = getCurrentTime();
+  addMessage(msg,'self',userName,time,replyTo);
+  renderedKeys.add(`${Date.now()}::${userName}::${msg}`);
+  chatInput.value='';
+  const sentReply = replyTo;
+  cancelReply();
+
+  try {
+    await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ user:userName, text:msg, time, reply: sentReply?{name:sentReply.name,text:sentReply.text}:null })
+    });
+    // refresh cepat
+    setTimeout(()=>loadMessages(false), 300);
+  } catch(e) {
+    toast('❌ Gagal kirim pesan','err');
+  }
+}
+
+function cancelReply(){replyTo=null;document.getElementById('reply-preview').classList.remove('show');}
+function setReply(name,text){
+  replyTo={name,text};
+  document.getElementById('reply-preview-name').textContent=name;
+  document.getElementById('reply-preview-text').textContent=text;
+  document.getElementById('reply-preview').classList.add('show');
+  chatInput.focus();
+}
+
+function addMessage(text,type,sender,time,reply){
+  const isSelf=type==='self';
+  const wrapper=document.createElement('div');
+  wrapper.className=`flex ${isSelf?'justify-end':'justify-start'} px-2 wa-msg-enter items-end my-1`;
+  if(!isSelf){
+    const av=document.createElement('div');
+    av.className='msg-avatar';
+    av.style.background=getAvatarColor(sender||'?');
+    av.textContent=getInitials(sender||'?');
+    wrapper.appendChild(av);
+  }
+  const bubble=document.createElement('div');
+  bubble.className=`wa-bubble ${isSelf?'wa-bubble-self':'wa-bubble-other'}`;
+  if(reply&&reply.name){
+    const r=document.createElement('div');
+    r.className='wa-reply';
+    r.innerHTML=`<div class="wa-reply-name">${escapeHtml(reply.name)}</div><div class="wa-reply-text">${escapeHtml(reply.text)}</div>`;
+    bubble.appendChild(r);
+  }
+  if(!isSelf&&sender){
+    const nameEl=document.createElement('div');
+    nameEl.className='wa-name';
+    nameEl.textContent=sender;
+    bubble.appendChild(nameEl);
+  }
+  const textEl=document.createElement('div');
+  textEl.style.wordBreak='break-word';
+  textEl.textContent=text;
+  bubble.appendChild(textEl);
+  const metaEl=document.createElement('div');
+  metaEl.className='wa-meta';
+  const timeEl=document.createElement('span');
+  timeEl.textContent=time||getCurrentTime();
+  metaEl.appendChild(timeEl);
+  if(isSelf){
+    const checkEl=document.createElement('i');
+    checkEl.className='fas fa-check-double';
+    checkEl.style.fontSize='11px';
+    checkEl.style.color='#53bdeb';
+    metaEl.appendChild(checkEl);
+  }
+  bubble.appendChild(metaEl);
+  bubble.onclick=()=>setReply(sender||'Anonim',text);
+  wrapper.appendChild(bubble);
+  chatMessages.appendChild(wrapper);
+  chatMessages.scrollTop=chatMessages.scrollHeight;
+}
+
+function addSystemMessage(text){
+  const div=document.createElement('div');
+  div.className='flex justify-center my-2 wa-msg-enter';
+  div.innerHTML=`<div class="chat-date">${escapeHtml(text)}</div>`;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop=chatMessages.scrollHeight;
+}
+
+chatInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChatMessage();}});
+userNameInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveUserName();}});
+
+function toggleTheme(){const isLight=document.body.style.backgroundColor==='rgb(248, 250, 252)';document.body.style.backgroundColor=isLight?'#070b14':'#f8fafc';document.body.style.color=isLight?'#f8fafc':'#0f172a';}
+document.addEventListener('DOMContentLoaded',()=>{checkShowSupportModalOnLoad();});
+</script>
+</body>
+</html>
