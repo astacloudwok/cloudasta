@@ -335,78 +335,60 @@ function toggleGrid(){gridStatus=!gridStatus;localStorage.setItem('grid',gridSta
 updateGridUI();
 
 function scrollToSection(id){const s=document.getElementById(id);if(s){const off=80;const pos=s.getBoundingClientRect().top+window.pageYOffset-off;window.scrollTo({top:pos,behavior:'smooth'});}}
-window.addEventListener('scroll',()=>{const sections=['hero','premium-form','cara-menggunakan','faq'];const navIds=['beranda','premium','panduan','faq'];let cur='beranda';sections.forEach((id,i)=>{const s=document.getElementById(id);if(s&&window.pageYOffset>=s.offsetTop-120)cur=navIds[i];});[...navIds,'chat'].forEach(id=>{const el=document.getElementById(`nav-${id}`);if(el)el.classList.remove('active');});document.getElementById(`nav-${cur}`).classList.add('active');});
-
 function toggleFaq(el){document.querySelectorAll('.faq-item').forEach(i=>{if(i!==el)i.classList.remove('active');});el.classList.toggle('active');}
 function toast(msg,type='info'){const c={ok:'border-green-500/50 text-green-200 bg-green-900/40',err:'border-red-500/50 text-red-200 bg-red-900/40',info:'border-blue-500/50 text-blue-200 bg-blue-900/40'};const t=document.createElement('div');t.className=`toast ${c[type]}`;t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
 function loading(btn,text){btn.disabled=true;btn.dataset.orig=btn.innerHTML;btn.innerHTML=`<span class="spinner"></span> <span class="ml-2">${text}</span>`;}
 function reset(btn){btn.disabled=false;if(btn.dataset.orig)btn.innerHTML=btn.dataset.orig;}
 function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
 
-// ================= DAILY LIMIT =================
+// ================= DAILY LIMIT (sama kayak sebelumnya) =================
 let limitReached = false;
-
 async function loadDailyStatus() {
   try {
     const r = await fetch('/stats', { headers: { 'Accept': 'application/json' } });
     const d = await r.json();
     if (!d.ok) return;
-
-    const total = d.total || 0;
-    const totalMax = d.totalMax || 5;
-    const sisa = d.sisa || 0;
-    const ipCount = d.ipCount || 0;
-    const ipMax = d.ipMax || 2;
+    const total = d.total || 0, totalMax = d.totalMax || 5, sisa = d.sisa || 0;
+    const ipCount = d.ipCount || 0, ipMax = d.ipMax || 2;
     const percent = (total / totalMax) * 100;
-
     document.getElementById('limit-badge').textContent = `${total} / ${totalMax}`;
     document.getElementById('limit-left').textContent = sisa;
-
     const fill = document.getElementById('limit-fill');
     fill.style.width = percent + '%';
     fill.classList.remove('warning', 'danger');
     if (percent >= 80) fill.classList.add('danger');
     else if (percent >= 50) fill.classList.add('warning');
-
     const btnSend = document.getElementById('btnSend');
     const msgEl = document.getElementById('limit-msg');
-
     if (sisa <= 0) {
       limitReached = true;
       btnSend.disabled = true;
       btnSend.innerHTML = '<i class="fas fa-lock"></i> Limit Habis';
       msgEl.textContent = '⚠️ Limit harian habis. Reset jam 00:00 WIB.';
-      msgEl.classList.remove('hidden');
-      msgEl.classList.add('text-red-400');
+      msgEl.classList.remove('hidden'); msgEl.classList.add('text-red-400');
     } else if (ipCount >= ipMax) {
       limitReached = true;
       btnSend.disabled = true;
       btnSend.innerHTML = '<i class="fas fa-lock"></i> IP Limit';
       msgEl.textContent = `⚠️ Kamu sudah pakai ${ipCount}/${ipMax} akun. Tunggu besok ya.`;
-      msgEl.classList.remove('hidden');
-      msgEl.classList.add('text-yellow-400');
+      msgEl.classList.remove('hidden'); msgEl.classList.add('text-yellow-400');
     } else {
       limitReached = false;
       btnSend.disabled = false;
       btnSend.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
       msgEl.textContent = `IP ini: ${ipCount}/${ipMax} akun hari ini`;
-      msgEl.classList.remove('hidden');
-      msgEl.classList.remove('text-red-400', 'text-yellow-400');
+      msgEl.classList.remove('hidden', 'text-red-400', 'text-yellow-400');
       msgEl.classList.add('text-[#8b9bb4]');
     }
-  } catch (e) { /* silent */ }
+  } catch (e) {}
 }
 
 // ================= GENERATOR =================
-let isVerifiedUnlocked = false;
-let lastEmail = '';
-
+let isVerifiedUnlocked = false, lastEmail = '';
 function switchGenTab(tab){
   if(tab==='verify' && !isVerifiedUnlocked){toast('Kirim email dulu sebelum ke step Verif','err');return;}
-  const tabSend=document.getElementById('tab-send');
-  const tabVerify=document.getElementById('tab-verify');
-  const panelSend=document.getElementById('panel-send');
-  const panelVerify=document.getElementById('panel-verify');
+  const tabSend=document.getElementById('tab-send'), tabVerify=document.getElementById('tab-verify');
+  const panelSend=document.getElementById('panel-send'), panelVerify=document.getElementById('panel-verify');
   if(tab==='send'){
     tabSend.className='flex-1 py-2.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white';
     tabVerify.className='flex-1 py-2.5 rounded-lg text-xs font-bold transition-all text-gray-400';
@@ -417,7 +399,6 @@ function switchGenTab(tab){
     panelVerify.classList.remove('hidden');panelSend.classList.add('hidden');
   }
 }
-
 function copySendLink(){const email=document.getElementById('sendEmail').value.trim()||'email@example.com';copyToClipboard(`${location.origin}/send?email=${encodeURIComponent(email)}`);}
 function copyToClipboard(text){if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>toast('URL disalin','ok')).catch(()=>fallbackCopy(text));}else fallbackCopy(text);}
 function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('URL disalin','ok');}catch(e){toast('Gagal','err');}document.body.removeChild(ta);}
@@ -438,12 +419,10 @@ async function submitEmail(){
       tabVerify.disabled=false;tabVerify.classList.remove('cursor-not-allowed','opacity-50');
       document.getElementById('sendEmail').value='';
       toast('✅ Link terkirim ke <b>'+email+'</b>','ok');
-      switchGenTab('verify');
-      loadDailyStatus();
+      switchGenTab('verify'); loadDailyStatus();
     } else {
       if (d.code === 'GLOBAL_LIMIT' || d.code === 'IP_LIMIT') {
-        limitReached = true;
-        btn.disabled = true;
+        limitReached = true; btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-lock"></i> Limit';
       }
       toast('❌ '+(d.why||'Gagal kirim'),'err');
@@ -467,16 +446,12 @@ async function submitUrl(){
       resEl.innerHTML=`<div class="space-y-4 text-center py-2 fade-in"><div class="bg-green-500/10 border border-green-500/40 rounded-2xl p-5 text-green-200"><div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto text-green-400 text-lg mb-3"><i class="fas fa-check"></i></div><h3 class="font-extrabold text-sm mb-3">PREMIUM SUCCESS!</h3><div class="bg-black/30 rounded-xl p-4 text-center space-y-2 text-xs"><div class="text-gray-400">📧 ${escapeHtml(d.email)}</div><div class="font-mono text-blue-400 font-extrabold text-lg">${escapeHtml(d.order)}</div><div class="text-green-400 font-bold text-xs">${escapeHtml(d.status)}</div><div class="text-[#8b9bb4] mt-2">Sisa hari ini: <b class="text-green-400">${d.sisa ?? 0}</b></div></div><p class="text-[11px] text-gray-300 mt-3">Login di app Alight Motion pakai email di atas ya~</p></div><button onclick="resetGenerator()" class="btn-primary text-sm flex items-center justify-center gap-2"><i class="fas fa-redo"></i> Ulang</button></div>`;
       toast('🎉 Premium berhasil diaktifkan!','ok');
     } else {
-      if (d.code === 'GLOBAL_LIMIT' || d.code === 'IP_LIMIT') {
-        toast('⚠️ Limit harian habis','err');
-      } else {
-        toast('❌ '+(d.why||'Gagal verifikasi'),'err');
-      }
+      if (d.code === 'GLOBAL_LIMIT' || d.code === 'IP_LIMIT') toast('⚠️ Limit harian habis','err');
+      else toast('❌ '+(d.why||'Gagal verifikasi'),'err');
     }
   }catch(e){toast('❌ Network error: '+e.message,'err');}
   finally{reset(btn);loadDailyStatus();}
 }
-
 function resetGenerator(){
   document.getElementById('verify-input-group').classList.remove('hidden');
   document.getElementById('verifyResult').innerHTML='';
@@ -487,162 +462,273 @@ function resetGenerator(){
   switchGenTab('send');
 }
 
-// ================= WEBSOCKET / POLLING CHAT =================
-// Karena Vercel gak support WebSocket, chat pakai polling ke /chat (Upstash Redis)
-let userName=localStorage.getItem('chatUserName')||'';
-let replyTo=null;
-let pollTimer=null;
-let renderedKeys=new Set();
+// ================= CHAT PERSIST + ONLINE (Polling) =================
+let userName = localStorage.getItem('chatUserName') || '';
+let replyTo = null;
+let pollTimer = null;
+let heartbeatTimer = null;
+let lastSeenId = 0;
+let renderedIds = new Set();
+let isChatOpen = false;
 
-const chatOverlay=document.getElementById('chat-overlay');
-const chatMessages=document.getElementById('chat-messages');
-const chatInput=document.getElementById('chat-input');
-const nameModal=document.getElementById('name-modal');
-const userNameInput=document.getElementById('userNameInput');
+const chatOverlay = document.getElementById('chat-overlay');
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+const nameModal = document.getElementById('name-modal');
+const userNameInput = document.getElementById('userNameInput');
 
-const AVATAR_COLORS=['#0ea5e9','#8b5cf6','#ec4899','#f59e0b','#10b981','#ef4444','#6366f1','#14b8a6'];
+const AVATAR_COLORS = ['#0ea5e9','#8b5cf6','#ec4899','#f59e0b','#10b981','#ef4444','#6366f1','#14b8a6'];
 function getAvatarColor(name){let h=0;for(let i=0;i<name.length;i++)h=name.charCodeAt(i)+((h<<5)-h);return AVATAR_COLORS[Math.abs(h)%AVATAR_COLORS.length];}
 function getInitials(name){return name.trim().split(/\s+/).map(w=>w[0]).join('').substring(0,2).toUpperCase()||'?';}
 function getCurrentTime(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
 
-function openChat(){
-  if(!userName){nameModal.classList.add('show');userNameInput.focus();return;}
-  chatOverlay.classList.remove('hidden');chatOverlay.classList.add('flex');
-  document.body.style.overflow='hidden';
-  startPolling();
-  setTimeout(()=>chatInput.focus(),200);
-}
-function closeNameModal(){nameModal.classList.remove('show');}
-function saveUserName(){
-  const name=userNameInput.value.trim();
-  if(!name){userNameInput.focus();return;}
-  userName=name.substring(0,20);
-  localStorage.setItem('chatUserName',userName);
-  nameModal.classList.remove('show');
-  setTimeout(()=>{
-    chatOverlay.classList.remove('hidden');chatOverlay.classList.add('flex');
-    document.body.style.overflow='hidden';
-    startPolling();
-    setTimeout(()=>chatInput.focus(),200);
-  },200);
-}
-function closeChat(){
-  chatOverlay.classList.add('hidden');chatOverlay.classList.remove('flex');
-  document.body.style.overflow='';
-  cancelReply();
-  stopPolling();
-}
-
-function startPolling(){
-  if(pollTimer) return;
-  loadMessages(true);
-  pollTimer = setInterval(()=>loadMessages(false), 2500);
-}
-function stopPolling(){
-  if(pollTimer){ clearInterval(pollTimer); pollTimer=null; }
-}
-
-async function loadMessages(isFirst){
+// ===== HEARTBEAT =====
+async function sendHeartbeat(action = 'ping') {
+  if (!userName) return;
   try {
-    const r = await fetch('/chat', { headers: { 'Accept': 'application/json' } });
+    await fetch('/online', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: userName, action })
+    });
+  } catch (e) {}
+}
+
+// ===== LOAD MESSAGES (delta) =====
+async function loadMessages(isFirst = false) {
+  try {
+    const url = isFirst ? '/chat' : `/chat?since=${lastSeenId}`;
+    const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
     const d = await r.json();
-    if(!d.ok || !Array.isArray(d.messages)) return;
+    if (!d.ok) return;
 
-    if(isFirst){
-      chatMessages.innerHTML='';
-      renderedKeys.clear();
+    // Update online count
+    const onlineCount = d.onlineCount || 0;
+    const onlineUsers = d.online || [];
+    const countEl = document.getElementById('online-count');
+    if (countEl) {
+      countEl.textContent = `${onlineCount} online`;
+    }
+
+    // Kalau first load, clear dulu
+    if (isFirst) {
+      chatMessages.innerHTML = '';
+      renderedIds.clear();
       addSystemMessage('Hari ini');
+      lastSeenId = 0;
     }
 
-    let newCount=0;
-    for(const m of d.messages){
-      const key = `${m.ts||0}::${m.user}::${m.text}`;
-      if(renderedKeys.has(key)) continue;
-      renderedKeys.add(key);
+    // Render pesan baru
+    const msgs = d.messages || [];
+    let added = 0;
+    for (const m of msgs) {
+      const id = m.id || m.ts || Date.now();
+      if (renderedIds.has(id)) continue;
+      renderedIds.add(id);
+      if (id > lastSeenId) lastSeenId = id;
       const isSelf = m.user === userName;
-      addMessage(m.text, isSelf?'self':'other', m.user, m.time, m.reply);
-      newCount++;
+      addMessage(m.text, isSelf ? 'self' : 'other', m.user, m.time, m.reply, true);
+      added++;
     }
-    if(newCount && chatOverlay.classList.contains('flex')){
+
+    // Kalau bukan pesan sendiri, tampilkan notif
+    if (added > 0 && !isFirst && isChatOpen) {
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-  } catch(e) { /* silent */ }
+  } catch (e) {}
 }
 
-async function sendChatMessage(){
-  const msg=chatInput.value.trim();
-  if(!msg)return;
-  if(!userName){nameModal.classList.add('show');return;}
-
-  const time = getCurrentTime();
-  addMessage(msg,'self',userName,time,replyTo);
-  renderedKeys.add(`${Date.now()}::${userName}::${msg}`);
-  chatInput.value='';
-  const sentReply = replyTo;
-  cancelReply();
-
-  try {
-    await fetch('/chat', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify({ user:userName, text:msg, time, reply: sentReply?{name:sentReply.name,text:sentReply.text}:null })
-    });
-    setTimeout(()=>loadMessages(false), 300);
-  } catch(e) {
-    toast('❌ Gagal kirim pesan','err');
+// ===== START / STOP POLLING =====
+function startChat() {
+  if (!pollTimer) {
+    loadMessages(true);
+    pollTimer = setInterval(() => loadMessages(false), 2500);
+  }
+  if (!heartbeatTimer) {
+    sendHeartbeat('ping');
+    heartbeatTimer = setInterval(() => sendHeartbeat('ping'), 20000);
   }
 }
 
-function cancelReply(){replyTo=null;document.getElementById('reply-preview').classList.remove('show');}
-function setReply(name,text){
-  replyTo={name,text};
-  document.getElementById('reply-preview-name').textContent=name;
-  document.getElementById('reply-preview-text').textContent=text;
+function stopChat() {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
+  // Kirim leave
+  if (userName) sendHeartbeat('leave');
+}
+
+// ===== UI CHAT =====
+function openChat() {
+  if (!userName) {
+    nameModal.classList.add('show');
+    userNameInput.focus();
+    return;
+  }
+  chatOverlay.classList.remove('hidden');
+  chatOverlay.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+  isChatOpen = true;
+  startChat();
+  setTimeout(() => chatInput.focus(), 200);
+}
+
+function closeNameModal() { nameModal.classList.remove('show'); }
+
+function saveUserName() {
+  const name = userNameInput.value.trim();
+  if (!name) { userNameInput.focus(); return; }
+  userName = name.substring(0, 20);
+  localStorage.setItem('chatUserName', userName);
+  nameModal.classList.remove('show');
+  setTimeout(() => {
+    chatOverlay.classList.remove('hidden');
+    chatOverlay.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    isChatOpen = true;
+    startChat();
+    setTimeout(() => chatInput.focus(), 200);
+  }, 200);
+}
+
+function closeChat() {
+  chatOverlay.classList.add('hidden');
+  chatOverlay.classList.remove('flex');
+  document.body.style.overflow = '';
+  isChatOpen = false;
+  stopChat();
+  cancelReply();
+}
+
+function sendChatMessage() {
+  const msg = chatInput.value.trim();
+  if (!msg) return;
+  if (!userName) { nameModal.classList.add('show'); return; }
+
+  // Optimistic — tampil langsung
+  const time = getCurrentTime();
+  addMessage(msg, 'self', userName, time, replyTo, false);
+  chatInput.value = '';
+  const sentReply = replyTo;
+  cancelReply();
+
+  // Kirim ke server
+  fetch('/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      user: userName,
+      text: msg,
+      time,
+      reply: sentReply ? { name: sentReply.name, text: sentReply.text } : null
+    })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.ok && d.msg && d.msg.id) {
+      // Register ID biar gak double
+      renderedIds.add(d.msg.id);
+      if (d.msg.id > lastSeenId) lastSeenId = d.msg.id;
+    }
+    // Refresh cepat
+    setTimeout(() => loadMessages(false), 300);
+  })
+  .catch(() => toast('❌ Gagal kirim pesan', 'err'));
+}
+
+function cancelReply() {
+  replyTo = null;
+  document.getElementById('reply-preview').classList.remove('show');
+}
+
+function setReply(name, text) {
+  replyTo = { name, text };
+  document.getElementById('reply-preview-name').textContent = name;
+  document.getElementById('reply-preview-text').textContent = text;
   document.getElementById('reply-preview').classList.add('show');
   chatInput.focus();
 }
 
-function addMessage(text,type,sender,time,reply){
-  const isSelf=type==='self';
-  const wrapper=document.createElement('div');
-  wrapper.className=`flex ${isSelf?'justify-end':'justify-start'} px-2 wa-msg-enter items-end my-1`;
-  if(!isSelf){
-    const av=document.createElement('div');
-    av.className='msg-avatar';av.style.background=getAvatarColor(sender||'?');
-    av.textContent=getInitials(sender||'?');wrapper.appendChild(av);
+function addMessage(text, type, sender, time, reply, fromServer = false) {
+  const isSelf = type === 'self';
+  const wrapper = document.createElement('div');
+  wrapper.className = `flex ${isSelf ? 'justify-end' : 'justify-start'} px-2 wa-msg-enter items-end my-1`;
+
+  if (!isSelf) {
+    const av = document.createElement('div');
+    av.className = 'msg-avatar';
+    av.style.background = getAvatarColor(sender || '?');
+    av.textContent = getInitials(sender || '?');
+    wrapper.appendChild(av);
   }
-  const bubble=document.createElement('div');
-  bubble.className=`wa-bubble ${isSelf?'wa-bubble-self':'wa-bubble-other'}`;
-  if(reply&&reply.name){
-    const r=document.createElement('div');r.className='wa-reply';
-    r.innerHTML=`<div class="wa-reply-name">${escapeHtml(reply.name)}</div><div class="wa-reply-text">${escapeHtml(reply.text)}</div>`;
+
+  const bubble = document.createElement('div');
+  bubble.className = `wa-bubble ${isSelf ? 'wa-bubble-self' : 'wa-bubble-other'}`;
+
+  if (reply && reply.name) {
+    const r = document.createElement('div');
+    r.className = 'wa-reply';
+    r.innerHTML = `<div class="wa-reply-name">${escapeHtml(reply.name)}</div><div class="wa-reply-text">${escapeHtml(reply.text)}</div>`;
     bubble.appendChild(r);
   }
-  if(!isSelf&&sender){const n=document.createElement('div');n.className='wa-name';n.textContent=sender;bubble.appendChild(n);}
-  const textEl=document.createElement('div');textEl.style.wordBreak='break-word';textEl.textContent=text;bubble.appendChild(textEl);
-  const metaEl=document.createElement('div');metaEl.className='wa-meta';
-  const timeEl=document.createElement('span');timeEl.textContent=time||getCurrentTime();metaEl.appendChild(timeEl);
-  if(isSelf){const c=document.createElement('i');c.className='fas fa-check-double';c.style.fontSize='11px';c.style.color='#53bdeb';metaEl.appendChild(c);}
+
+  if (!isSelf && sender) {
+    const n = document.createElement('div');
+    n.className = 'wa-name';
+    n.textContent = sender;
+    bubble.appendChild(n);
+  }
+
+  const textEl = document.createElement('div');
+  textEl.style.wordBreak = 'break-word';
+  textEl.textContent = text;
+  bubble.appendChild(textEl);
+
+  const metaEl = document.createElement('div');
+  metaEl.className = 'wa-meta';
+  const timeEl = document.createElement('span');
+  timeEl.textContent = time || getCurrentTime();
+  metaEl.appendChild(timeEl);
+
+  if (isSelf) {
+    const c = document.createElement('i');
+    c.className = 'fas fa-check-double';
+    c.style.fontSize = '11px';
+    c.style.color = '#53bdeb';
+    metaEl.appendChild(c);
+  }
   bubble.appendChild(metaEl);
-  bubble.onclick=()=>setReply(sender||'Anonim',text);
+
+  bubble.onclick = () => setReply(sender || 'Anonim', text);
   wrapper.appendChild(bubble);
   chatMessages.appendChild(wrapper);
-  chatMessages.scrollTop=chatMessages.scrollHeight;
+
+  if (!fromServer || isSelf) {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
 }
 
-function addSystemMessage(text){
-  const d=document.createElement('div');d.className='flex justify-center my-2 wa-msg-enter';
-  d.innerHTML=`<div class="chat-date">${escapeHtml(text)}</div>`;
-  chatMessages.appendChild(d);chatMessages.scrollTop=chatMessages.scrollHeight;
+function addSystemMessage(text) {
+  const d = document.createElement('div');
+  d.className = 'flex justify-center my-2 wa-msg-enter';
+  d.innerHTML = `<div class="chat-date">${escapeHtml(text)}</div>`;
+  chatMessages.appendChild(d);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-chatInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChatMessage();}});
-userNameInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveUserName();}});
+chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendChatMessage(); } });
+userNameInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveUserName(); } });
 
-// ================= INIT =================
+// Kirim leave kalau user tutup tab
+window.addEventListener('beforeunload', () => {
+  if (userName) {
+    navigator.sendBeacon('/online', JSON.stringify({ user: userName, action: 'leave' }));
+  }
+});
+
+// ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
   loadDailyStatus();
-  setInterval(loadDailyStatus, 60000); // refresh tiap 1 menit
+  setInterval(loadDailyStatus, 60000);
 });
 </script>
 </body>
