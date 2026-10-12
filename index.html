@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Astacloud — AM Premium Generator</title>
 
-<!-- ================= OG TAGS ================= -->
+<!-- OG META -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://asta.astamotion.my.id/">
 <meta property="og:title" content="Astacloud — AM Premium Generator">
@@ -28,6 +28,9 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- LOAD CONFIG DULU -->
+<script src="config.js"></script>
 
 <style>
 :root{--bg-dark:#070b14;--bg-card:#0f172a;--accent:#2563eb;--accent-glow:rgba(37,99,235,.4);--text-main:#f8fafc;--text-muted:#8b9bb4;--border-color:rgba(255,255,255,.08);}
@@ -92,22 +95,16 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
           <i class="fas fa-chevron-down text-[9px] opacity-60"></i>
         </button>
         <div id="lang-menu" class="lang-menu">
-          <div class="lang-option active" onclick="setLanguage('id')" data-lang="id">
-            <span class="lang-flag">🇮🇩</span><span>Indonesia</span>
-          </div>
-          <div class="lang-option" onclick="setLanguage('en')" data-lang="en">
-            <span class="lang-flag">🇬🇧</span><span>English</span>
-          </div>
-          <div class="lang-option" onclick="setLanguage('jp')" data-lang="jp">
-            <span class="lang-flag">🇯🇵</span><span>日本語</span>
-          </div>
+          <div class="lang-option active" onclick="setLanguage('id')" data-lang="id"><span class="lang-flag">🇮🇩</span><span>Indonesia</span></div>
+          <div class="lang-option" onclick="setLanguage('en')" data-lang="en"><span class="lang-flag">🇬🇧</span><span>English</span></div>
+          <div class="lang-option" onclick="setLanguage('jp')" data-lang="jp"><span class="lang-flag">🇯🇵</span><span>日本語</span></div>
         </div>
       </div>
     </div>
   </div>
 </header>
 
-<main class="pt-24 px-4 max-w-md mx-auto space-y-16" id="main-content">
+<main class="pt-24 px-4 max-w-md mx-auto space-y-16">
 
   <!-- HERO -->
   <section id="hero" class="text-center fade-in">
@@ -241,14 +238,8 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
       <h2 class="text-xl font-extrabold mb-4" data-i18n="about.title">Tentang Astacloud</h2>
       <p class="text-xs text-[#8b9bb4] leading-relaxed mb-8" data-i18n="about.desc">Astacloud adalah tools sederhana buat bantu kamu mengaktifkan premium Alight Motion secara otomatis lewat verifikasi email.</p>
       <div class="space-y-3">
-        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5">
-          <span class="text-[10px] font-bold text-gray-500 tracking-wider" data-i18n="about.website">WEBSITE</span>
-          <span class="text-xs font-bold">Astacloud</span>
-        </div>
-        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5">
-          <span class="text-[10px] font-bold text-gray-500 tracking-wider" data-i18n="about.product">PRODUK</span>
-          <span class="text-xs font-bold">Alight Motion Premium</span>
-        </div>
+        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5"><span class="text-[10px] font-bold text-gray-500 tracking-wider" data-i18n="about.website">WEBSITE</span><span class="text-xs font-bold">Astacloud</span></div>
+        <div class="flex justify-between items-center p-4 rounded-xl bg-[#0a0f1c] border border-white/5"><span class="text-[10px] font-bold text-gray-500 tracking-wider" data-i18n="about.product">PRODUK</span><span class="text-xs font-bold">Alight Motion Premium</span></div>
       </div>
     </div>
   </section>
@@ -257,35 +248,17 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
   <section id="faq" class="fade-in">
     <h2 class="text-2xl font-extrabold text-center mb-8" data-i18n="faq.title">Pertanyaan Umum</h2>
     <div class="space-y-3">
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
-        <div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q1">Apa itu Astacloud?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div>
-        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a1">Astacloud adalah website generator Alight Motion Premium yang jalan otomatis dan gratis.</div>
-      </div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
-        <div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q2">Berapa limit per hari?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div>
-        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a2">Limit 5 akun per hari untuk keseluruhan, dan 2 akun per orang (per IP). Reset otomatis jam 00:00 WIB.</div>
-      </div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
-        <div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q3">Apakah ini berbayar?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div>
-        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a3">Nggak, 100% gratis. Kami cuma minta kamu verifikasi email buat prosesnya.</div>
-      </div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
-        <div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q4">Link verifikasi nggak masuk?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div>
-        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a4">Coba cek folder Spam atau Promosi di Gmail. Kalau belum masuk, tunggu 2-5 menit terus refresh.</div>
-      </div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
-        <div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q5">Data saya aman?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div>
-        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a5">Aman. Email kamu cuma dipakai untuk verifikasi resmi Alight Motion, gak disimpan atau dipakai hal lain.</div>
-      </div>
-      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)">
-        <div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q6">Kapan limitnya reset?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div>
-        <div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a6">Setiap hari jam 00:00 WIB. Habis itu kamu bisa generate lagi.</div>
-      </div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q1">Apa itu Astacloud?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a1">Astacloud adalah website generator Alight Motion Premium yang jalan otomatis dan gratis.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q2">Berapa limit per hari?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a2">Limit 5 akun per hari untuk keseluruhan, dan 2 akun per orang (per IP). Reset otomatis jam 00:00 WIB.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q3">Apakah ini berbayar?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a3">Nggak, 100% gratis. Kami cuma minta kamu verifikasi email buat prosesnya.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q4">Link verifikasi nggak masuk?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a4">Coba cek folder Spam atau Promosi di Gmail. Kalau belum masuk, tunggu 2-5 menit terus refresh.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q5">Data saya aman?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a5">Aman. Email kamu cuma dipakai untuk verifikasi resmi Alight Motion.</div></div>
+      <div class="faq-item glass-card cursor-pointer" onclick="toggleFaq(this)"><div class="flex justify-between items-center"><h3 class="font-bold text-sm" data-i18n="faq.q6">Kapan limitnya reset?</h3><i class="fas fa-chevron-down text-xs text-blue-500 faq-chevron"></i></div><div class="faq-content text-xs text-[#8b9bb4] mt-4 leading-relaxed" data-i18n="faq.a6">Setiap hari jam 00:00 WIB. Habis itu kamu bisa generate lagi.</div></div>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer id="footer" class="fade-in pt-8 border-t border-white/5 text-center">
+  <footer class="fade-in pt-8 border-t border-white/5 text-center">
     <div class="flex items-center justify-center gap-2 mb-4">
       <img src="assets/asta.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/30 border border-white/10" onerror="this.style.display='none'">
       <span class="font-extrabold text-lg tracking-tight">Astacloud</span>
@@ -304,25 +277,15 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 <!-- NAV -->
 <nav class="fixed bottom-0 w-full z-50 bg-[#0a0f1c]/95 backdrop-blur-lg border-t border-white/10 px-2 py-3">
   <div class="max-w-md mx-auto flex justify-between items-center">
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5 active" onclick="scrollToSection('hero')" id="nav-beranda">
-      <div class="nav-indicator"></div><i class="fas fa-home text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.home">Beranda</span>
-    </div>
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('premium-form')" id="nav-premium">
-      <div class="nav-indicator"></div><i class="fas fa-crown text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.premium">Premium</span>
-    </div>
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('cara-menggunakan')" id="nav-panduan">
-      <div class="nav-indicator"></div><i class="fas fa-list-check text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.guide">Panduan</span>
-    </div>
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('faq')" id="nav-faq">
-      <div class="nav-indicator"></div><i class="fas fa-question-circle text-lg"></i><span class="text-[10px] font-medium">FAQ</span>
-    </div>
-    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="openDonationModal()" id="nav-donasi">
-      <div class="nav-indicator"></div><i class="fas fa-hand-holding-heart text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.donate">Donasi</span>
-    </div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5 active" onclick="scrollToSection('hero')" id="nav-beranda"><div class="nav-indicator"></div><i class="fas fa-home text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.home">Beranda</span></div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('premium-form')" id="nav-premium"><div class="nav-indicator"></div><i class="fas fa-crown text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.premium">Premium</span></div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('cara-menggunakan')" id="nav-panduan"><div class="nav-indicator"></div><i class="fas fa-list-check text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.guide">Panduan</span></div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="scrollToSection('faq')" id="nav-faq"><div class="nav-indicator"></div><i class="fas fa-question-circle text-lg"></i><span class="text-[10px] font-medium">FAQ</span></div>
+    <div class="nav-item flex flex-col items-center gap-1.5 w-1/5" onclick="openDonationModal()" id="nav-donasi"><div class="nav-indicator"></div><i class="fas fa-hand-holding-heart text-lg"></i><span class="text-[10px] font-medium" data-i18n="nav.donate">Donasi</span></div>
   </div>
 </nav>
 
-<!-- FLOATING DONATION BUTTON -->
+<!-- FLOATING DONATION -->
 <button onclick="openDonationModal()" class="fixed bottom-24 right-4 w-12 h-12 bg-pink-600 rounded-full shadow-lg shadow-pink-500/30 flex items-center justify-center text-white z-40 hover:scale-105 active:scale-95 transition-all">
   <i class="fas fa-heart text-lg"></i>
 </button>
@@ -331,19 +294,10 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 <div id="donation-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] hidden items-center justify-center p-4">
   <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in text-center">
     <div class="flex justify-between items-start mb-4">
-      <div class="text-left">
-        <h3 class="font-extrabold text-base text-white" data-i18n="donate.title">Dukung Astacloud</h3>
-        <p class="text-[11px] text-[#8b9bb4] mt-1" data-i18n="donate.subtitle">Traktir developer kopi ☕</p>
-      </div>
-      <button onclick="closeDonationModal()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors shrink-0">
-        <i class="fas fa-times text-xs"></i>
-      </button>
+      <div class="text-left"><h3 class="font-extrabold text-base text-white" data-i18n="donate.title">Dukung Astacloud</h3><p class="text-[11px] text-[#8b9bb4] mt-1" data-i18n="donate.subtitle">Traktir developer kopi ☕</p></div>
+      <button onclick="closeDonationModal()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors shrink-0"><i class="fas fa-times text-xs"></i></button>
     </div>
-
-    <p class="text-xs text-[#8b9bb4] mb-6 leading-relaxed" data-i18n="donate.desc">
-      Donasi kamu sangat berarti buat keberlangsungan & pengembangan website ini. Setiap rupiah sangat membantu! 🙏
-    </p>
-
+    <p class="text-xs text-[#8b9bb4] mb-6 leading-relaxed" data-i18n="donate.desc">Donasi kamu sangat berarti buat keberlangsungan & pengembangan website ini. Setiap rupiah sangat membantu! 🙏</p>
     <div class="bg-[#0a0f1c] border border-white/10 rounded-2xl p-4 mb-6 flex flex-col items-center">
       <div class="w-56 h-56 bg-white rounded-xl flex items-center justify-center mb-4 overflow-hidden relative">
         <img src="assets/qris.jpg" alt="QRIS" class="w-full h-full object-contain p-2" onerror="this.parentElement.innerHTML='<i class=\'fas fa-image text-gray-400 text-4xl\'></i>'">
@@ -351,7 +305,6 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
       <p class="text-[10px] text-gray-500" data-i18n="donate.scanHint">Scan QRIS di atas untuk berdonasi</p>
       <p class="text-[10px] text-gray-500 mt-1">Support: DANA / OVO / GoPay / ShopeePay</p>
     </div>
-
     <button onclick="closeDonationModal()" class="w-full py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs hover:bg-white/10 transition-colors" data-i18n="donate.close">Tutup</button>
   </div>
 </div>
@@ -360,32 +313,27 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 <div id="support-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[90] hidden items-center justify-center p-4">
   <div class="w-full max-w-sm bg-[#0f172a] border border-white/10 rounded-3xl p-6 shadow-2xl fade-in">
     <div class="flex justify-between items-start mb-5">
-      <div>
-        <h3 class="font-extrabold text-base text-white" data-i18n="support.title">Support Developer</h3>
-        <p class="text-[11px] text-[#8b9bb4] mt-1.5 leading-relaxed" data-i18n="support.subtitle">Dukung Astacloud dengan follow sosmed & channel resmi developer.</p>
-      </div>
-      <button onclick="closeSupportModal()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors shrink-0">
-        <i class="fas fa-times text-xs"></i>
-      </button>
+      <div><h3 class="font-extrabold text-base text-white" data-i18n="support.title">Support Developer</h3><p class="text-[11px] text-[#8b9bb4] mt-1.5 leading-relaxed" data-i18n="support.subtitle">Dukung Astacloud dengan follow sosmed & channel resmi developer.</p></div>
+      <button onclick="closeSupportModal()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors shrink-0"><i class="fas fa-times text-xs"></i></button>
     </div>
     <div class="space-y-3 mb-6">
-      <a href="https://tiktok.com/@imxxxzzz" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+      <a id="link-tiktok1" href="#" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
         <i class="fab fa-tiktok text-xl text-white w-6 text-center"></i>
         <div class="flex-1"><h4 class="text-xs font-bold text-white">TikTok</h4><p class="text-[10px] text-[#8b9bb4] mt-0.5">@imxxzz</p></div>
         <i class="fas fa-external-link-alt text-[10px] text-gray-500"></i>
       </a>
-      <a href="https://tiktok.com/@astacloud2" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+      <a id="link-tiktok2" href="#" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
         <i class="fab fa-tiktok text-xl text-white w-6 text-center"></i>
         <div class="flex-1"><h4 class="text-xs font-bold text-white">TikTok 2</h4><p class="text-[10px] text-[#8b9bb4] mt-0.5">@astacloud</p></div>
         <i class="fas fa-external-link-alt text-[10px] text-gray-500"></i>
       </a>
-      <a href="https://whatsapp.com/channel/0029VbCdCFkI1rceYd2vik31" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+      <a id="link-wachannel" href="#" target="_blank" class="flex items-center gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
         <i class="fab fa-whatsapp text-xl text-green-400 w-6 text-center"></i>
         <div class="flex-1"><h4 class="text-xs font-bold text-white" data-i18n="support.waChannel">Saluran WhatsApp</h4><p class="text-[10px] text-[#8b9bb4] mt-0.5">Astacloud Channel</p></div>
         <i class="fas fa-external-link-alt text-[10px] text-gray-500"></i>
       </a>
     </div>
-    <button onclick="window.open('https://wa.me/62882019782087','_blank')" class="w-full py-3.5 rounded-xl bg-blue-600 text-white font-bold text-xs mb-4 flex items-center justify-center gap-2 hover:bg-blue-500 transition-colors">
+    <button id="btn-contact-dev" class="w-full py-3.5 rounded-xl bg-blue-600 text-white font-bold text-xs mb-4 flex items-center justify-center gap-2 hover:bg-blue-500 transition-colors">
       <i class="fas fa-comment-dots"></i> <span data-i18n="support.contact">Hubungi Developer</span>
     </button>
     <label class="flex items-center gap-3 text-[11px] text-[#8b9bb4] mb-4 cursor-pointer select-none">
@@ -397,6 +345,14 @@ body.grid-active{background-image:linear-gradient(rgba(37,99,235,.06) 1px,transp
 </div>
 
 <script>
+// ============================================================
+// CONFIG — dari config.js
+// ============================================================
+const CFG = window.ASTACLOUD_CONFIG || {};
+const API_BASE = CFG.API_BASE || 'https://api.astamotion.my.id';
+const EP = CFG.ENDPOINTS || { STATS:'/stats', SEND:'/send', VERIFY:'/verify', WS:'/ws' };
+const SOCIAL = CFG.SOCIAL || {};
+
 // ============================================================
 // TRANSLATIONS
 // ============================================================
@@ -436,13 +392,10 @@ const TRANSLATIONS = {
     'footer.copyright': '© 2026 Astacloud • All Rights Reserved.',
     'footer.privacy': 'Kebijakan Privasi', 'footer.terms': 'Syarat & Ketentuan', 'footer.contact': 'Kontak',
     'nav.home': 'Beranda', 'nav.premium': 'Premium', 'nav.guide': 'Panduan', 'nav.donate': 'Donasi',
-    'donate.title': 'Dukung Astacloud',
-    'donate.subtitle': 'Traktir developer kopi ☕',
+    'donate.title': 'Dukung Astacloud', 'donate.subtitle': 'Traktir developer kopi ☕',
     'donate.desc': 'Donasi kamu sangat berarti buat keberlangsungan & pengembangan website ini. Setiap rupiah sangat membantu! 🙏',
-    'donate.scanHint': 'Scan QRIS di atas untuk berdonasi',
-    'donate.close': 'Tutup',
-    'support.title': 'Support Developer',
-    'support.subtitle': 'Dukung Astacloud dengan follow sosmed & channel resmi developer.',
+    'donate.scanHint': 'Scan QRIS di atas untuk berdonasi', 'donate.close': 'Tutup',
+    'support.title': 'Support Developer', 'support.subtitle': 'Dukung Astacloud dengan follow sosmed & channel resmi developer.',
     'support.waChannel': 'Saluran WhatsApp', 'support.contact': 'Hubungi Developer',
     'support.hide24h': 'Tampilkan lagi setelah 24 jam', 'support.close': 'Tutup',
     'toast.linkSent': 'Link terkirim ke', 'toast.premiumActive': 'Premium berhasil diaktifkan!',
@@ -485,13 +438,10 @@ const TRANSLATIONS = {
     'footer.copyright': '© 2026 Astacloud • All Rights Reserved.',
     'footer.privacy': 'Privacy Policy', 'footer.terms': 'Terms & Conditions', 'footer.contact': 'Contact',
     'nav.home': 'Home', 'nav.premium': 'Premium', 'nav.guide': 'Guide', 'nav.donate': 'Donate',
-    'donate.title': 'Support Astacloud',
-    'donate.subtitle': 'Buy developer a coffee ☕',
-    'donate.desc': 'Your donation means a lot for the sustainability & development of this website. Every rupiah helps! 🙏',
-    'donate.scanHint': 'Scan the QRIS above to donate',
-    'donate.close': 'Close',
-    'support.title': 'Support Developer',
-    'support.subtitle': 'Support Astacloud by following the developer social media & channels.',
+    'donate.title': 'Support Astacloud', 'donate.subtitle': 'Buy developer a coffee ☕',
+    'donate.desc': 'Your donation means a lot for the sustainability & development of this website.',
+    'donate.scanHint': 'Scan the QRIS above to donate', 'donate.close': 'Close',
+    'support.title': 'Support Developer', 'support.subtitle': 'Support Astacloud by following the developer social media & channels.',
     'support.waChannel': 'WhatsApp Channel', 'support.contact': 'Contact Developer',
     'support.hide24h': 'Show again after 24 hours', 'support.close': 'Close',
     'toast.linkSent': 'Link sent to', 'toast.premiumActive': 'Premium activated successfully!',
@@ -519,7 +469,7 @@ const TRANSLATIONS = {
     'how.title': '使い方', 'how.subtitle': 'シンプルな3ステップですぐ完了。',
     'how.step1.title': '1. メールを入力', 'how.step1.desc': 'プレミアム登録したい有効なメールを使用してください。',
     'how.step2.title': '2. 受信箱と迷惑メールを確認', 'how.step2.desc': 'Alight Creative からのメールを探し、認証リンクをコピーします。',
-    'how.step3.title': '3. 認証', 'how.step3.desc': 'リンクを貼り付けて認証をクリックすると、すぐにプレミアムが有効になります。',
+    'how.step3.title': '3. 認証', 'how.step3.desc': 'リンクを貼り付けて認証をクリックすると、すぐに有効になります。',
     'about.title': 'Astacloud について',
     'about.desc': 'Astacloud は、メール認証を通じて Alight Motion プレミアムを自動で有効化するシンプルなツールです。',
     'about.website': 'ウェブサイト', 'about.product': '製品',
@@ -534,13 +484,10 @@ const TRANSLATIONS = {
     'footer.copyright': '© 2026 Astacloud • All Rights Reserved.',
     'footer.privacy': 'プライバシーポリシー', 'footer.terms': '利用規約', 'footer.contact': 'お問い合わせ',
     'nav.home': 'ホーム', 'nav.premium': 'プレミアム', 'nav.guide': 'ガイド', 'nav.donate': '寄付',
-    'donate.title': 'Astacloud を支援',
-    'donate.subtitle': '開発者にコーヒーをおごる ☕',
+    'donate.title': 'Astacloud を支援', 'donate.subtitle': '開発者にコーヒーをおごる ☕',
     'donate.desc': 'あなたの寄付は、このサイトの維持と開発にとって非常に重要です。',
-    'donate.scanHint': '上の QRIS をスキャンして寄付',
-    'donate.close': '閉じる',
-    'support.title': '開発者をサポート',
-    'support.subtitle': '開発者の SNS と公式チャンネルをフォローして Astacloud を応援してください。',
+    'donate.scanHint': '上の QRIS をスキャンして寄付', 'donate.close': '閉じる',
+    'support.title': '開発者をサポート', 'support.subtitle': '開発者の SNS と公式チャンネルをフォローして応援してください。',
     'support.waChannel': 'WhatsApp チャンネル', 'support.contact': '開発者に連絡',
     'support.hide24h': '24時間後に再度表示', 'support.close': '閉じる',
     'toast.linkSent': 'リンクを送信しました:', 'toast.premiumActive': 'プレミアムが有効になりました！',
@@ -550,7 +497,7 @@ const TRANSLATIONS = {
   }
 };
 
-let currentLang = localStorage.getItem('astacloud_lang') || 'id';
+let currentLang = localStorage.getItem('astacloud_lang') || (CFG.INFO && CFG.INFO.DEFAULT_LANG) || 'id';
 function t(key){return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || (TRANSLATIONS['id'][key]) || key;}
 function applyTranslations(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{const v=t(el.getAttribute('data-i18n'));if(v)el.textContent=v;});
@@ -561,12 +508,7 @@ function applyTranslations(){
   document.getElementById('lang-code-current').textContent=codes[currentLang];
   document.querySelectorAll('.lang-option').forEach(o=>o.classList.toggle('active',o.dataset.lang===currentLang));
 }
-function setLanguage(lang){
-  currentLang = lang;
-  localStorage.setItem('astacloud_lang', lang);
-  applyTranslations();
-  closeLangMenu();
-}
+function setLanguage(lang){currentLang = lang;localStorage.setItem('astacloud_lang', lang);applyTranslations();closeLangMenu();}
 function toggleLangMenu(){document.getElementById('lang-menu').classList.toggle('show');}
 function closeLangMenu(){document.getElementById('lang-menu').classList.remove('show');}
 document.addEventListener('click', (e) => {
@@ -579,42 +521,23 @@ document.addEventListener('click', (e) => {
 // UI HELPERS
 // ============================================================
 let gridStatus = localStorage.getItem('astacloud_grid') !== 'off';
-function updateGridUI(){
-  const b=document.getElementById('grid-toggle-btn');
-  if(gridStatus){document.body.classList.add('grid-active');b.classList.add('text-blue-400');}
-  else{document.body.classList.remove('grid-active');b.classList.remove('text-blue-400');}
-}
+function updateGridUI(){const b=document.getElementById('grid-toggle-btn');if(gridStatus){document.body.classList.add('grid-active');b.classList.add('text-blue-400');}else{document.body.classList.remove('grid-active');b.classList.remove('text-blue-400');}}
 function toggleGrid(){gridStatus=!gridStatus;localStorage.setItem('astacloud_grid',gridStatus?'on':'off');updateGridUI();}
-
-function scrollToSection(id){
-  const s=document.getElementById(id);
-  if(s){const off=80;const pos=s.getBoundingClientRect().top+window.pageYOffset-off;window.scrollTo({top:pos,behavior:'smooth'});}
-}
-window.addEventListener('scroll',()=>{
-  const sections=['hero','premium-form','cara-menggunakan','faq'];
-  const navIds=['beranda','premium','panduan','faq'];
-  let cur='beranda';
-  sections.forEach((id,i)=>{const s=document.getElementById(id);if(s&&window.pageYOffset>=s.offsetTop-120)cur=navIds[i];});
-  [...navIds,'donasi'].forEach(id=>{const el=document.getElementById(`nav-${id}`);if(el)el.classList.remove('active');});
-  const curEl=document.getElementById(`nav-${cur}`); if(curEl) curEl.classList.add('active');
-});
+function scrollToSection(id){const s=document.getElementById(id);if(s){const off=80;const pos=s.getBoundingClientRect().top+window.pageYOffset-off;window.scrollTo({top:pos,behavior:'smooth'});}}
+window.addEventListener('scroll',()=>{const sections=['hero','premium-form','cara-menggunakan','faq'];const navIds=['beranda','premium','panduan','faq'];let cur='beranda';sections.forEach((id,i)=>{const s=document.getElementById(id);if(s&&window.pageYOffset>=s.offsetTop-120)cur=navIds[i];});[...navIds,'donasi'].forEach(id=>{const el=document.getElementById(`nav-${id}`);if(el)el.classList.remove('active');});const curEl=document.getElementById(`nav-${cur}`);if(curEl)curEl.classList.add('active');});
 function toggleFaq(el){document.querySelectorAll('.faq-item').forEach(i=>{if(i!==el)i.classList.remove('active');});el.classList.toggle('active');}
-function toast(msg,type='info'){
-  const c={ok:'border-green-500/50 text-green-200 bg-green-900/40',err:'border-red-500/50 text-red-200 bg-red-900/40',info:'border-blue-500/50 text-blue-200 bg-blue-900/40'};
-  const t2=document.createElement('div');t2.className=`toast ${c[type]}`;t2.innerHTML=msg;
-  document.body.appendChild(t2);setTimeout(()=>t2.remove(),3500);
-}
+function toast(msg,type='info'){const c={ok:'border-green-500/50 text-green-200 bg-green-900/40',err:'border-red-500/50 text-red-200 bg-red-900/40',info:'border-blue-500/50 text-blue-200 bg-blue-900/40'};const t2=document.createElement('div');t2.className=`toast ${c[type]}`;t2.innerHTML=msg;document.body.appendChild(t2);setTimeout(()=>t2.remove(),3500);}
 function loading(btn,text){btn.disabled=true;btn.dataset.orig=btn.innerHTML;btn.innerHTML=`<span class="spinner"></span> <span class="ml-2">${text}</span>`;}
 function reset(btn){btn.disabled=false;if(btn.dataset.orig)btn.innerHTML=btn.dataset.orig;}
 function escapeHtmlChat(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
 
 // ============================================================
-// DAILY LIMIT
+// DAILY LIMIT — Fetch ke Pterodactyl
 // ============================================================
 let limitReached = false;
 async function loadDailyStatus() {
   try {
-    const r = await fetch('/stats', { headers: { 'Accept': 'application/json' } });
+    const r = await fetch(`${API_BASE}${EP.STATS}`, { headers: { 'Accept': 'application/json' } });
     const d = await r.json();
     if (!d.ok) return;
     const total=d.total||0,totalMax=d.totalMax||5,sisa=d.sisa||0;
@@ -668,7 +591,7 @@ function switchGenTab(tab){
 }
 function copySendLink(){
   const email=document.getElementById('sendEmail').value.trim()||'email@example.com';
-  copyToClipboard(`${location.origin}/send?email=${encodeURIComponent(email)}`);
+  copyToClipboard(`${API_BASE}${EP.SEND}?email=${encodeURIComponent(email)}`);
 }
 function copyToClipboard(text){
   if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>toast(t('toast.copied'),'ok')).catch(()=>fallbackCopy(text));}
@@ -692,7 +615,7 @@ async function submitEmail(){
   if(!email||!/@/.test(email)){toast(t('toast.invalidEmail'),'err');return;}
   loading(btn,'...');
   try{
-    const r=await fetch('/send',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email})});
+    const r=await fetch(`${API_BASE}${EP.SEND}`,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email})});
     const d=await r.json();
     if(d.ok){
       lastEmail=email;isVerifiedUnlocked=true;
@@ -716,7 +639,7 @@ async function submitUrl(){
   if(!lastEmail){toast(t('toast.sendEmailFirst'),'err');return;}
   loading(btn,'...');
   try{
-    const r=await fetch('/verify',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email:lastEmail,link})});
+    const r=await fetch(`${API_BASE}${EP.VERIFY}`,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email:lastEmail,link})});
     const d=await r.json();
     if(d.ok){
       document.getElementById('verify-input-group').classList.add('hidden');
@@ -740,33 +663,16 @@ function resetGenerator(){
 }
 
 // ============================================================
-// DONATION MODAL
+// MODALS
 // ============================================================
-function openDonationModal(){
-  const modal=document.getElementById('donation-modal');
-  if(!modal)return;
-  modal.classList.remove('hidden');modal.classList.add('flex');
-}
-function closeDonationModal(){
-  const modal=document.getElementById('donation-modal');
-  if(!modal)return;
-  modal.classList.add('hidden');modal.classList.remove('flex');
-}
-
-// ============================================================
-// SUPPORT MODAL
-// ============================================================
-function openSupportModal(){
-  const modal=document.getElementById('support-modal');
-  if(!modal)return;
-  modal.classList.remove('hidden');modal.classList.add('flex');
-}
+function openDonationModal(){const m=document.getElementById('donation-modal');if(m){m.classList.remove('hidden');m.classList.add('flex');}}
+function closeDonationModal(){const m=document.getElementById('donation-modal');if(m){m.classList.add('hidden');m.classList.remove('flex');}}
+function openSupportModal(){const m=document.getElementById('support-modal');if(m){m.classList.remove('hidden');m.classList.add('flex');}}
 function closeSupportModal(){
-  const modal=document.getElementById('support-modal');
-  if(!modal)return;
-  modal.classList.add('hidden');modal.classList.remove('flex');
-  const checkbox=document.getElementById('hideSupportCheck');
-  if(checkbox&&checkbox.checked){localStorage.setItem('astacloud_support_hide_until',Date.now()+(24*60*60*1000));}
+  const m=document.getElementById('support-modal');if(!m)return;
+  m.classList.add('hidden');m.classList.remove('flex');
+  const c=document.getElementById('hideSupportCheck');
+  if(c&&c.checked){localStorage.setItem('astacloud_support_hide_until',Date.now()+(24*60*60*1000));}
   else{localStorage.removeItem('astacloud_support_hide_until');}
 }
 function checkShowSupportModal(){
@@ -774,7 +680,6 @@ function checkShowSupportModal(){
   if(until&&Date.now()<parseInt(until))return;
   setTimeout(()=>{openSupportModal();},1200);
 }
-
 document.addEventListener('click',(e)=>{
   const sm=document.getElementById('support-modal');
   const dm=document.getElementById('donation-modal');
@@ -786,10 +691,23 @@ document.addEventListener('keydown',(e)=>{
 });
 
 // ============================================================
+// APPLY SOCIAL LINKS FROM CONFIG
+// ============================================================
+function applyConfigLinks(){
+  if(SOCIAL.tiktok1) document.getElementById('link-tiktok1').href = SOCIAL.tiktok1;
+  if(SOCIAL.tiktok2) document.getElementById('link-tiktok2').href = SOCIAL.tiktok2;
+  if(SOCIAL.waChannel) document.getElementById('link-wachannel').href = SOCIAL.waChannel;
+  if(SOCIAL.waContact){
+    document.getElementById('btn-contact-dev').onclick = () => window.open(SOCIAL.waContact, '_blank');
+  }
+}
+
+// ============================================================
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded',()=>{
   applyTranslations();
+  applyConfigLinks();
   updateGridUI();
   loadDailyStatus();
   setInterval(loadDailyStatus,60000);

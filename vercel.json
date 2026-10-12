@@ -1,1 +1,4 @@
-{  "version": 2,  "rewrites": [    { "source": "/send", "destination": "/api/send" },    { "source": "/verify", "destination": "/api/verify" },    { "source": "/stats", "destination": "/api/stats" }  ]}
+{
+  "version": 2,
+  "cleanUrls": true
+}
